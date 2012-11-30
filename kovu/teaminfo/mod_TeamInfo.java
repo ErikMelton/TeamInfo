@@ -17,6 +17,7 @@ import net.minecraft.src.ModLoader;
 import net.minecraft.src.Potion;
 
 public class mod_TeamInfo extends BaseMod {
+	
 	Boolean mcisloaded = false;
 	Boolean oneKovu = false;
 	
@@ -41,16 +42,19 @@ public class mod_TeamInfo extends BaseMod {
 	public String rejectRequest;
 	
 	EntityClientPlayerMP player;
-	
+		
 	int i = 0;
 	
+	public static boolean minusActivated;
+	
 	public String getVersion() {
-		return "For MC version 1.3.2";
+		return "For MC version 1.4.4";
 	}
 
 	public mod_TeamInfo() {
 		
 		ModLoader.registerKey(this, new KeyBinding("Team Info", Keyboard.KEY_EQUALS),  false);
+		ModLoader.registerKey(this, new KeyBinding("Team Info", Keyboard.KEY_MINUS),  false);
 		ModLoader.setInGameHook(this, true, true);
 		rejectRequest = "NOTACCEPTED";
 	}
@@ -60,6 +64,17 @@ public class mod_TeamInfo extends BaseMod {
 			System.out.println("Pressed");
 			mcisloaded = true;
 			ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfo(guiscreen));
+		}
+		if(keybinding.keyCode == Keyboard.KEY_MINUS) {
+		GuiDraggableElement e = new GuiDraggableElement(1, 1, 100, 30);
+			if(minusActivated == false)
+			{
+				minusActivated = true;
+			}
+			else if(minusActivated == true)
+			{
+			minusActivated = false;
+			}
 		}
 	}
 	public void load() {
