@@ -2,8 +2,8 @@ package kovu.teaminfo;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.src.GuiButton;
-import net.minecraft.src.GuiScreen;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.src.ModLoader;
 
 public class GuiTeamInfo extends GuiScreen {
@@ -39,11 +39,11 @@ public class GuiTeamInfo extends GuiScreen {
 	{
 		if(guibutton.id == 0)
 		{
-			mc.displayGuiScreen(new GuiAddtoTeam(this));
+			mc.displayGuiScreen(new GuiAddtoTeam(parentScreen));
 		}
 		if(guibutton.id == 1)
 		{
-			mc.displayGuiScreen(new GuiRemoveFromTeam(this));
+			mc.displayGuiScreen(new GuiRemoveFromTeam(parentScreen));
 		}
 		if(guibutton.id == 2)
 		{

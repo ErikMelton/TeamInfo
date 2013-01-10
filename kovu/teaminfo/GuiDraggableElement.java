@@ -3,9 +3,7 @@ package kovu.teaminfo;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.Minecraft;
-
-import net.minecraft.src.Gui;
-import net.minecraft.src.GuiScreen;
+import net.minecraft.client.gui.Gui;
 
 public class GuiDraggableElement extends Gui {
 

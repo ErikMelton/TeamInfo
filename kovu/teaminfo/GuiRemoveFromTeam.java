@@ -6,12 +6,12 @@ import java.util.Iterator;
 import java.util.List;
 
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+
 import org.lwjgl.input.Keyboard;
 
 import friendmodapi.FriendModApi;
-
-import net.minecraft.src.GuiButton;
-import net.minecraft.src.GuiScreen;
 
 public class GuiRemoveFromTeam extends GuiScreen {
 

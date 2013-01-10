@@ -1,7 +1,7 @@
 package kovu.teaminfo;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.World;
+import net.minecraft.world.World;
 
 public class Kovu {
 

@@ -1,13 +1,13 @@
 package kovu.teaminfo;
 
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
+
 import org.lwjgl.input.Keyboard;
 
 import friendmodapi.FriendModApi;
-
-import net.minecraft.src.GuiButton;
-import net.minecraft.src.GuiScreen;
-import net.minecraft.src.GuiTextField;
 
 public class GuiAddtoTeam extends GuiScreen {
 

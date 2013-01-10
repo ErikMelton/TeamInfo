@@ -8,13 +8,13 @@ import org.lwjgl.input.Keyboard;
 import friendmodapi.FriendModApi;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.potion.Potion;
 import net.minecraft.src.BaseMod;
-import net.minecraft.src.EntityClientPlayerMP;
-import net.minecraft.src.FoodStats;
-import net.minecraft.src.GuiScreen;
-import net.minecraft.src.KeyBinding;
 import net.minecraft.src.ModLoader;
-import net.minecraft.src.Potion;
+import net.minecraft.util.FoodStats;
 
 public class mod_TeamInfo extends BaseMod {
 	
@@ -63,7 +63,7 @@ public class mod_TeamInfo extends BaseMod {
 		if(keybinding.keyCode == Keyboard.KEY_EQUALS) {
 			System.out.println("Pressed");
 			mcisloaded = true;
-			ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfo(guiscreen));
+			//ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfo(guiscreen));
 		}
 		if(keybinding.keyCode == Keyboard.KEY_MINUS) {
 		GuiDraggableElement e = new GuiDraggableElement(1, 1, 100, 30);
