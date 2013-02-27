@@ -1,1 +1,6 @@
 /target/
+/src/main/java/net/
+/src/main/java/org/
+/src/main/java/Start.java
+/src/main/java/argo/
+/.gitignore
