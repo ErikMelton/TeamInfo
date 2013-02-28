@@ -2,26 +2,32 @@
 /target/
 
 ##Minecraft
-/src/main/java/net/
-/src/main/java/org/
-/src/main/java/Start.java
-/src/main/java/argo/
-/src/main/java/paulscode/
-/src/main/java/com/
+/src/net/
+/src/org/
+/src/Start.java
+/src/argo/
+/src/paulscode/
+/src/com/
 
 ##Forge
-/src/main/java/cpw/
-/src/main/java/ibxm/
-/src/main/resources/fml_at.cfg
-/src/main/resources/fml_marker.cfg
-/src/main/resources/fmlversion.properties
-/src/main/resources/forge_at.cfg
-/src/main/resources/forge_logo.png
-/src/main/resources/mcp.png
-/src/main/resources/mcpmod.info
+/src/cpw/
+/src/ibxm/
+/src/fml_at.cfg
+/src/fml_marker.cfg
+/src/fmlversion.properties
+/src/forge_at.cfg
+/src/forge_logo.png
+/src/mcp.png
+/src/mcpmod.info
 
 ##Git
 /.gitignore
 
 ##Maven
 pom.xml
+
+#Netbeans
+/nbproject/
+/lib/
+/build/
+/dist/

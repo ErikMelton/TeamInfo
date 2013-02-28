@@ -93,7 +93,7 @@ public class mod_TeamInfo extends BaseMod {
         onfire = "OF= " + kovu.mc.thePlayer.isBurning();
         stats = coordstats + " " + health + " " + food + " " + armour + " " + poison + " " + fireresist + " " + weakness + " " + swiftness + " " + slowness + " " + regen + " " + hungerdrain + " " + onfire;
         try {
-            TeamStatsAPI.updateStats(stats);
+            TeamStatsAPI.updateStats(stats, stats);
 
         } catch (IOException e) {
             e.printStackTrace();
