@@ -21,7 +21,7 @@
 /src/mcpmod.info
 
 ##Git
-/.gitignore
+.gitignore
 
 ##Maven
 pom.xml
@@ -31,3 +31,5 @@ pom.xml
 /lib/
 /build/
 /dist/
+build.xml
+manifest.mf
