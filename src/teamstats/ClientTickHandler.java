@@ -48,7 +48,7 @@ public class ClientTickHandler implements ITickHandler {
 
     public void onRenderTick() {
 
-        if (mod_TeamInfo.minusActivated) {
+        if (mod_TeamInfo.getInstance().minusActivated) {
             GuiDraggableElement e = new GuiDraggableElement(1, 1, 100, 30);
             e.drawElement();
             System.out.println("OUt");

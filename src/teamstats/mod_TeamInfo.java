@@ -1,6 +1,10 @@
 package teamstats;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.lwjgl.input.Keyboard;
 import teamstats.api.TeamStatsAPI;
 import net.minecraft.client.Minecraft;
@@ -10,45 +14,37 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.potion.Potion;
 import net.minecraft.src.BaseMod;
 import net.minecraft.src.ModLoader;
-import net.minecraft.util.FoodStats;
 
 public class mod_TeamInfo extends BaseMod {
 
     Boolean mcisloaded = false;
-    Boolean oneKovu = false;
     GuiScreen guiscreen;
     Kovu kovu;
     Minecraft mc = ModLoader.getMinecraftInstance();
-    public String coordstats;
-    public String health;
-    public String food;
-    public String armour;
-    public String fireresist;
-    public String poison;
-    public String weakness;
-    public String swiftness;
-    public String slowness;
-    public String regen;
-    public String hungerdrain;
-    public String onfire;
-    public String stats;
     public String rejectRequest;
     EntityClientPlayerMP player;
     int i = 0;
-    public static boolean minusActivated;
+    public boolean minusActivated;
+    private static mod_TeamInfo instance;
+    private static final Logger logger = Logger.getLogger(mod_TeamInfo.class.getName());
 
     public String getVersion() {
-        return "For MC version 1.4.4";
+        return "For MC version 1.4.7";
     }
 
-    public mod_TeamInfo() {
-
-        ModLoader.registerKey(this, new KeyBinding("Team Info", Keyboard.KEY_EQUALS), false);
-        ModLoader.registerKey(this, new KeyBinding("Team Info", Keyboard.KEY_MINUS), false);
-        ModLoader.setInGameHook(this, true, true);
+    public mod_TeamInfo() throws IllegalAccessException {
+        if (instance == null) {
+            instance = this;
+        } else {
+            throw new IllegalAccessException("Attemped to recreate instance for TeamStats");
+        }
+        ModLoader.registerKey(instance, new KeyBinding("Team Info", Keyboard.KEY_EQUALS), false);
+        ModLoader.registerKey(instance, new KeyBinding("Team Info", Keyboard.KEY_MINUS), false);
+        ModLoader.setInGameHook(instance, true, true);
         rejectRequest = "NOTACCEPTED";
     }
 
+    @Override
     public void keyboardEvent(KeyBinding keybinding) {
         if (keybinding.keyCode == Keyboard.KEY_EQUALS) {
             System.out.println("Pressed");
@@ -66,79 +62,73 @@ public class mod_TeamInfo extends BaseMod {
     }
 
     public void load() {
-
         try {
             TeamStatsAPI.setupApi(mc.session.username, mc.session.sessionId);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (UnknownHostException ex) {
+            logger.log(Level.SEVERE, "An error has occured", ex);
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, "An error has occured", ex);
         }
     }
 
     public void sendStats() {
-        int var16;
-        coordstats = "POSX= " + kovu.mc.thePlayer.posX + " POSY= " + kovu.mc.thePlayer.posY + " POSZ= " + kovu.mc.thePlayer.posZ;
-        health = "HP= " + kovu.mc.thePlayer.getHealth();
-        FoodStats var15 = kovu.mc.thePlayer.getFoodStats();
-        var16 = var15.getFoodLevel();
-        food = "FD= " + var16;
-        armour = "AR= " + kovu.mc.thePlayer.getTotalArmorValue();
-        poison = "PS= " + kovu.mc.thePlayer.isPotionActive(Potion.poison);
-        fireresist = "FR= " + kovu.mc.thePlayer.isPotionActive(Potion.fireResistance);
-        weakness = "WK= " + kovu.mc.thePlayer.isPotionActive(Potion.weakness);
-        swiftness = "SW= " + kovu.mc.thePlayer.isPotionActive(Potion.moveSpeed);
-        slowness = "SL= " + kovu.mc.thePlayer.isPotionActive(Potion.moveSlowdown);
-        regen = "RG= " + kovu.mc.thePlayer.isPotionActive(Potion.regeneration);
-        hungerdrain = "HD= " + kovu.mc.thePlayer.isPotionActive(Potion.hunger);
-        onfire = "OF= " + kovu.mc.thePlayer.isBurning();
-        stats = coordstats + " " + health + " " + food + " " + armour + " " + poison + " " + fireresist + " " + weakness + " " + swiftness + " " + slowness + " " + regen + " " + hungerdrain + " " + onfire;
+        HashMap<String, Object> stats = new HashMap<String, Object>();
+        stats.put("POSX", kovu.mc.thePlayer.posX);
+        stats.put("POSY", kovu.mc.thePlayer.posY);
+        stats.put("POSZ", kovu.mc.thePlayer.posZ);
+        stats.put("HP", kovu.mc.thePlayer.getHealth());
+        stats.put("FD", kovu.mc.thePlayer.getFoodStats().getFoodLevel());
+        stats.put("AR", kovu.mc.thePlayer.getTotalArmorValue());
+        stats.put("PS", kovu.mc.thePlayer.isPotionActive(Potion.poison));
+        stats.put("FR", kovu.mc.thePlayer.isPotionActive(Potion.fireResistance));
+        stats.put("WK", kovu.mc.thePlayer.isPotionActive(Potion.weakness));
+        stats.put("SW", kovu.mc.thePlayer.isPotionActive(Potion.moveSpeed));
+        stats.put("SL", kovu.mc.thePlayer.isPotionActive(Potion.moveSlowdown));
+        stats.put("RG", kovu.mc.thePlayer.isPotionActive(Potion.regeneration));
+        stats.put("HD", kovu.mc.thePlayer.isPotionActive(Potion.hunger));
+        stats.put("OF", kovu.mc.thePlayer.isBurning());
+
         try {
-            TeamStatsAPI.updateStats(stats, stats);
-
+            TeamStatsAPI.updateStats(stats);
         } catch (IOException e) {
-            e.printStackTrace();
-
+            logger.log(Level.SEVERE, "An error has occured", e);
         }
-
     }
 
+    @Override
     public boolean onTickInGame(float tick, Minecraft mc) {
 
-        if (oneKovu == false) {
-            Kovu kovu = new Kovu(mc);
-            oneKovu = true;
+        if (kovu == null) {
+            kovu = new Kovu(mc);
         }
 
         if (mcisloaded == true) {
             //String[] s = FriendModApi.getFriendRequests();
-            String[] s = new String[5];
+            String[] s = new String[]{
+                "Rainfur",
+                "Lord_Ralex",
+                "charsmud",
+                "Chicken_nuggster",
+                "JurassicBerry"
+            };
+            if (s == null) {
+                s = new String[0];
+            }
 
             if (i == 20) {
                 sendStats();
-                System.out.println(stats);
                 i = 0;
-
-                if (s != null) {
-                    //EXPL: These are there for testing purposes
-                    s[0] = "Rainfur";
-                    s[1] = "Lord_Ralex";
-                    s[2] = "charsmud";
-                    s[3] = "Chicken_nuggster";
-                    s[4] = "JurassicBerry";
-
-                    //	System.out.println(s.length);
-
-                    for (int i = 0; i < s.length; i++) {
-                        if (s[i] == null) {
-                            break;
-                        }
-                        System.out.println(s[i]);
-                        s[i] = null;
-                    }
+                System.out.print("Names in list: ");
+                for (String string : s) {
+                    System.out.print(string + " ");
                 }
             }
             i++;
         }
         return true;
+    }
+
+    public static mod_TeamInfo getInstance() {
+        return instance;
     }
 }

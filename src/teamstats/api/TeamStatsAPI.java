@@ -172,7 +172,8 @@ public final class TeamStatsAPI {
      * Sends the stats to the server. This will never return false. If the
      * connection is rejected, this will throw an IOException.
      *
-     * @param newStats New stats to send
+     * @param key Key to set
+     * @param value The value for this key
      * @return True if connection was successful.
      * @throws IOException Thrown when server fails to send data or if server
      * rejects communication
@@ -180,6 +181,22 @@ public final class TeamStatsAPI {
     public static boolean updateStats(String key, Object value) throws IOException {
         wasSetup();
         stats.put(key.toLowerCase().trim(), value);
+        return true;
+    }
+
+    /**
+     * Sends the stats to the server. This will never return false. If the
+     * connection is rejected, this will throw an IOException.
+     *
+     * @param map Map of values to set
+     * @return True if connection was successful.
+     * @throws IOException Thrown when server fails to send data or if server
+     * rejects communication
+     */
+    public static boolean updateStats(Map<String, ? extends Object> map) throws IOException {
+        for (String key : map.keySet()) {
+            updateStats(key, map.get(key));
+        }
         return true;
     }
 
