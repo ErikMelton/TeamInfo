@@ -1,10 +1,11 @@
-package teamstats;
+package kovu.teamstats;
 
 import java.io.IOException;
+
+import kovu.ralex.teamstats.api.TeamStatsAPI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import teamstats.api.TeamStatsAPI;
 
 public class GuiAddReject extends GuiScreen {
 
@@ -29,9 +30,9 @@ public class GuiAddReject extends GuiScreen {
     }
 
     public void initGui() {
-        controlList.clear();
-        controlList.add(new GuiButton(0, width / 2 - 66, height / 2 + 5, 60, 20, "Add"));
-        controlList.add(new GuiButton(1, width / 2 + 6, height / 2 + 5, 60, 20, "reject"));
+    	buttonList.clear();
+    	buttonList.add(new GuiButton(0, width / 2 - 66, height / 2 + 5, 60, 20, "Add"));
+    	buttonList.add(new GuiButton(1, width / 2 + 6, height / 2 + 5, 60, 20, "reject"));
     }
 
     public void actionPerformed(GuiButton guibutton) {

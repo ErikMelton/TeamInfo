@@ -1,4 +1,4 @@
-package teamstats;
+package kovu.teamstats;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;

@@ -1,4 +1,4 @@
-package teamstats.api.list;
+package kovu.ralex.teamstats.api.list;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package teamstats;
+package kovu.teamstats;
 
 import java.util.EnumSet;
 import net.minecraft.client.Minecraft;

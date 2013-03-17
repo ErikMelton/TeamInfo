@@ -1,13 +1,14 @@
-package teamstats;
+package kovu.teamstats;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import kovu.ralex.teamstats.api.TeamStatsAPI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
-import teamstats.api.TeamStatsAPI;
 
 public class GuiRemoveFromTeam extends GuiScreen {
 
@@ -57,7 +58,7 @@ public class GuiRemoveFromTeam extends GuiScreen {
 
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
-        controlList.clear();
+        buttonList.clear();
         players = 0;
         friends = new String[2];
         friends[0] = "Rainfur";
@@ -73,9 +74,9 @@ public class GuiRemoveFromTeam extends GuiScreen {
         for (Iterator iterator = list.iterator(); iterator.hasNext();) {
             String s = (String) iterator.next();
             if (players % 2 == 0) {
-                controlList.add(new GuiButton(players, width / 2 - 90, (height / 2 - 20) + 23 * (players / 2), 80, 20, s));
+            	buttonList.add(new GuiButton(players, width / 2 - 90, (height / 2 - 20) + 23 * (players / 2), 80, 20, s));
             } else {
-                controlList.add(new GuiButton(players, width / 2 + 10, (height / 2 - 20) + 23 * (players / 2), 80, 20, s));
+            	buttonList.add(new GuiButton(players, width / 2 + 10, (height / 2 - 20) + 23 * (players / 2), 80, 20, s));
             }
             players++;
         }
@@ -83,7 +84,7 @@ public class GuiRemoveFromTeam extends GuiScreen {
         if (players % 2 != 0 || players == 0) {
             extra = 1;
         }
-        controlList.add(new GuiButton(players, width / 2 - 30, (height / 2 - 20) + 23 * (players / 2 + extra), 60, 20, "Back"));
+        buttonList.add(new GuiButton(players, width / 2 - 30, (height / 2 - 20) + 23 * (players / 2 + extra), 60, 20, "Back"));
     }
 
     public void onGuiClosed() {
@@ -103,7 +104,7 @@ public class GuiRemoveFromTeam extends GuiScreen {
                 try {
                     System.out.println("Inside of" + i);
                     TeamStatsAPI.removeFriend(s1);
-                    controlList.remove(i);
+                    buttonList.remove(i);
                 } catch (IOException e) {
 
                     e.printStackTrace();

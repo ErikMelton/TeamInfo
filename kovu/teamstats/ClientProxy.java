@@ -1,4 +1,4 @@
-package teamstats;
+package kovu.teamstats;
 
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;

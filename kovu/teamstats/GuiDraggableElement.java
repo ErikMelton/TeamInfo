@@ -1,4 +1,4 @@
-package teamstats;
+package kovu.teamstats;
 
 import org.lwjgl.input.Mouse;
 import net.minecraft.client.Minecraft;

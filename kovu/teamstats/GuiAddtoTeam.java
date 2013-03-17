@@ -1,10 +1,10 @@
-package teamstats;
+package kovu.teamstats;
 
+import kovu.ralex.teamstats.api.TeamStatsAPI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import org.lwjgl.input.Keyboard;
-import teamstats.api.TeamStatsAPI;
 
 public class GuiAddtoTeam extends GuiScreen {
 
@@ -18,9 +18,9 @@ public class GuiAddtoTeam extends GuiScreen {
 
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
-        controlList.clear();
-        controlList.add(new GuiButton(0, width / 2 - 66, height / 2 + 5, 60, 20, "Add"));
-        controlList.add(new GuiButton(1, width / 2 + 6, height / 2 + 5, 60, 20, "Back"));
+        buttonList.clear();
+        buttonList.add(new GuiButton(0, width / 2 - 66, height / 2 + 5, 60, 20, "Add"));
+        buttonList.add(new GuiButton(1, width / 2 + 6, height / 2 + 5, 60, 20, "Back"));
         serverTextField = new GuiTextField(fontRenderer, width / 2 - 100, height / 2 - 25, 200, 20);
         serverTextField.setVisible(true);
         serverTextField.setFocused(true);
@@ -49,7 +49,7 @@ public class GuiAddtoTeam extends GuiScreen {
     public void keyTyped(char c, int i) {
         serverTextField.textboxKeyTyped(c, i);
         if (c == '\r') {
-            actionPerformed((GuiButton) controlList.get(1));
+            actionPerformed((GuiButton) buttonList.get(1));
         }
         super.keyTyped(c, i);
     }

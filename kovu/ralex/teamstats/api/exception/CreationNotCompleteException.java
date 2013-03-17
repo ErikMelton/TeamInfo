@@ -1,4 +1,4 @@
-package teamstats.api.exception;
+package kovu.ralex.teamstats.api.exception;
 
 /**
  *

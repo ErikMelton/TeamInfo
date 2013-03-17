@@ -1,12 +1,15 @@
-package teamstats;
+package kovu.teamstats;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import kovu.minevideo.gui.RainfurF6Gui;
+import kovu.ralex.teamstats.api.TeamStatsAPI;
+
 import org.lwjgl.input.Keyboard;
-import teamstats.api.TeamStatsAPI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiScreen;
@@ -29,7 +32,7 @@ public class mod_TeamInfo extends BaseMod {
     private static final Logger logger = Logger.getLogger(mod_TeamInfo.class.getName());
 
     public String getVersion() {
-        return "For MC version 1.4.7";
+        return "For MC version 1.5.0";
     }
 
     public mod_TeamInfo() throws IllegalAccessException {
@@ -49,7 +52,9 @@ public class mod_TeamInfo extends BaseMod {
         if (keybinding.keyCode == Keyboard.KEY_EQUALS) {
             System.out.println("Pressed");
             mcisloaded = true;
-            //ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfo(guiscreen));
+            mc.thePlayer.addChatMessage("= pressed");
+         
+			ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfo(guiscreen));
         }
         if (keybinding.keyCode == Keyboard.KEY_MINUS) {
             GuiDraggableElement e = new GuiDraggableElement(1, 1, 100, 30);

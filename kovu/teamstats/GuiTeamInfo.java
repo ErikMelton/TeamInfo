@@ -1,4 +1,4 @@
-package teamstats;
+package kovu.teamstats;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -21,10 +21,10 @@ public class GuiTeamInfo extends GuiScreen {
     }
 
     public void initGui() {
-        controlList.clear();
-        controlList.add(new GuiButton(0, width / 2 - 102, height / 2 + 5, 60, 20, "Add"));
-        controlList.add(new GuiButton(1, width / 2 - 30, height / 2 + 5, 60, 20, "Remove"));
-        controlList.add(new GuiButton(2, width / 2 + 42, height / 2 + 5, 60, 20, "Config"));
+    	buttonList.clear();
+    	buttonList.add(new GuiButton(0, width / 2 - 102, height / 2 + 5, 60, 20, "Add"));
+    	buttonList.add(new GuiButton(1, width / 2 - 30, height / 2 + 5, 60, 20, "Remove"));
+    	buttonList.add(new GuiButton(2, width / 2 + 42, height / 2 + 5, 60, 20, "Config"));
     }
 
     public void actionPerformed(GuiButton guibutton) {
