@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import kovu.minevideo.gui.RainfurF6Gui;
 import kovu.ralex.teamstats.api.TeamStatsAPI;
 
 import org.lwjgl.input.Keyboard;
