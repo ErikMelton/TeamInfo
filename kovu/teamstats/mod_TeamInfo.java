@@ -1,5 +1,6 @@
 package kovu.teamstats;
 
+import java.awt.RenderingHints.Key;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -41,27 +42,25 @@ public class mod_TeamInfo extends BaseMod {
             throw new IllegalAccessException("Attemped to recreate instance for TeamStats");
         }
         ModLoader.registerKey(instance, new KeyBinding("Team Info", Keyboard.KEY_EQUALS), false);
-        ModLoader.registerKey(instance, new KeyBinding("Team Info", Keyboard.KEY_MINUS), false);
+        ModLoader.registerKey(instance, new KeyBinding("Test", Keyboard.KEY_0), false);
         ModLoader.setInGameHook(instance, true, true);
         rejectRequest = "NOTACCEPTED";
     }
 
     @Override
     public void keyboardEvent(KeyBinding keybinding) {
+    	
         if (keybinding.keyCode == Keyboard.KEY_EQUALS) {
             System.out.println("Pressed");
             mcisloaded = true;
             mc.thePlayer.addChatMessage("= pressed");
          
-			ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfo(guiscreen));
         }
-        if (keybinding.keyCode == Keyboard.KEY_MINUS) {
-            GuiDraggableElement e = new GuiDraggableElement(1, 1, 100, 30);
-            if (minusActivated == false) {
-                minusActivated = true;
-            } else if (minusActivated == true) {
-                minusActivated = false;
-            }
+        if(keybinding.keyCode == Keyboard.KEY_0)
+        {
+        	mc.thePlayer.addChatMessage("IN");
+			ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfo(guiscreen));
+
         }
     }
 
