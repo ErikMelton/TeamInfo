@@ -52,6 +52,10 @@ public class mod_TeamInfo extends BaseMod {
         if(keybinding.keyCode == Keyboard.KEY_0)
         {
 			ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfo(guiscreen));
+			//TODO:  ADDED
+			SkinHandler sk = new SkinHandler();
+			sk.downloadSkin("Charsmud");
+			sk.downloadSkin("Rainfur");
         }
     }
 

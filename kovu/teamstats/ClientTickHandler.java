@@ -3,6 +3,7 @@ package kovu.teamstats;
 import java.util.EnumSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
@@ -46,7 +47,10 @@ public class ClientTickHandler implements ITickHandler {
     public void onTickInGame() {
     }
 
-    public void onRenderTick() {
-
+    public void onRenderTick() 
+    {
+    	//TODO: ADDED
+    	SkinHandler sk = new SkinHandler();
+    	sk.cropHeadAndDisplay(FMLClientHandler.instance().getClient(), "Charsmud");
     }
 }
