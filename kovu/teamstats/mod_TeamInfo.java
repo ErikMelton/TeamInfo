@@ -42,6 +42,7 @@ public class mod_TeamInfo extends BaseMod {
             throw new IllegalAccessException("Attemped to recreate instance for TeamStats");
         }
         ModLoader.registerKey(instance, new KeyBinding("TStats", Keyboard.KEY_0), false);
+        ModLoader.registerKey(instance, new KeyBinding("Change Location", Keyboard.KEY_EQUALS), false);
         ModLoader.setInGameHook(instance, true, true);
         rejectRequest = "NOTACCEPTED";
     }
@@ -56,6 +57,11 @@ public class mod_TeamInfo extends BaseMod {
 			SkinHandler sk = new SkinHandler();
 			sk.downloadSkin("Charsmud");
 			sk.downloadSkin("Rainfur");
+        }
+        if(keybinding.keyCode == Keyboard.KEY_EQUALS)
+        {
+        	mc.thePlayer.addChatMessage("TeamStats configuration mode enabled");
+        	ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfoIngame(guiscreen));
         }
     }
 
