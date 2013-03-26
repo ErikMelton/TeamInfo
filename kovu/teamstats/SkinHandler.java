@@ -1,14 +1,20 @@
+
 package kovu.teamstats;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.imageio.ImageIO;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
@@ -17,25 +23,25 @@ import net.minecraft.src.ModLoader;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.TextureFXManager;
 import cpw.mods.fml.common.FMLLog;
 
 
 public class SkinHandler {
 
-	File skinFolder = new File(System.getProperty("user.dir") + "\\dlskins");
+	File skinFolder = new File(ModLoader.getMinecraftInstance().getMinecraftDir() + "\\dlskins");
 	//Know the params?
-    //private BufferedImage missingTextureImage = new BufferedImage(64, 64, 2);
+    private BufferedImage missingTextureImage = new BufferedImage(64, 64, 2);
 
-    //public static Logger log = FMLLog.getLogger();
+    public static Logger log = FMLLog.getLogger();
 
-    //private HashMap textureContentsMap = new HashMap();
+    private HashMap textureContentsMap = new HashMap();
     
 	private BufferedImage img;
 	private int imgID = 1000;
 	
 	public void makeSkinDir()
 	{
-		Minecraft mc = FMLClientHandler.instance().getClient();
 		skinFolder.mkdirs();
 	}
 	public void downloadSkin(String playerName)
@@ -54,7 +60,7 @@ public class SkinHandler {
 		}
 	}
 	
-  /*  public int[] getTextureContents(String texture)
+    public int[] getTextureContents(String texture)
     {
             try
             {
@@ -104,7 +110,7 @@ public class SkinHandler {
         par1InputStream.close();
         return bufferedimage;
     }
-*/
+
 	
 	public void cropHeadAndDisplay(Minecraft minecraft, String playerName)
 	{
@@ -130,7 +136,7 @@ public class SkinHandler {
 		{
 			int tempVar = minecraft.renderEngine.getTexture(playerSkin.toString());
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			minecraft.renderEngine.func_96448_c(tempVar);
+		//	minecraft.renderEngine.(tempVar);
 			GuiIngame gig = new GuiIngame(minecraft);
 			gig.drawTexturedModalRect(5, 5, 8, 8, 8, 8);
 			

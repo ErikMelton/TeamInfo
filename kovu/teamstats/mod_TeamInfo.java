@@ -30,12 +30,15 @@ public class mod_TeamInfo extends BaseMod {
     public boolean minusActivated;
     private static mod_TeamInfo instance;
     private static final Logger logger = Logger.getLogger(mod_TeamInfo.class.getName());
+    SkinHandler sk;
 
     public String getVersion() {
         return "For MC version 1.5.0";
     }
 
     public mod_TeamInfo() throws IllegalAccessException {
+		sk = new SkinHandler();
+
         if (instance == null) {
             instance = this;
         } else {
@@ -44,6 +47,7 @@ public class mod_TeamInfo extends BaseMod {
         ModLoader.registerKey(instance, new KeyBinding("TStats", Keyboard.KEY_0), false);
         ModLoader.registerKey(instance, new KeyBinding("Change Location", Keyboard.KEY_EQUALS), false);
         ModLoader.setInGameHook(instance, true, true);
+        sk.makeSkinDir();
         rejectRequest = "NOTACCEPTED";
     }
 
@@ -53,15 +57,14 @@ public class mod_TeamInfo extends BaseMod {
         if(keybinding.keyCode == Keyboard.KEY_0)
         {
 			ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfo(guiscreen));
-			//TODO:  ADDED
-			SkinHandler sk = new SkinHandler();
+			//TODO:  MOVE THE DOWNLOADS
 			sk.downloadSkin("Charsmud");
 			sk.downloadSkin("Rainfur");
         }
         if(keybinding.keyCode == Keyboard.KEY_EQUALS)
         {
         	mc.thePlayer.addChatMessage("TeamStats configuration mode enabled");
-        	ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfoIngame(guiscreen));
+        	ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfoIngame());
         }
     }
 

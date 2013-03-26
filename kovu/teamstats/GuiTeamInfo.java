@@ -12,6 +12,7 @@ public class GuiTeamInfo extends GuiScreen {
     }
 
     public void updateScreen() {
+    	
     }
 
     public void drawScreen(int i, int j, float f) {

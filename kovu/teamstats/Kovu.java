@@ -18,6 +18,9 @@ public class Kovu {
     public static boolean armour = true;
     public static boolean noarmour = true;
     public static boolean coords = false;
+    public static boolean clickPlayer = false;
+    public static boolean clickWorld = false;
+    public static boolean clickMenu = false;
     public static World world;
 
     public Kovu(Minecraft theMinecraft) {

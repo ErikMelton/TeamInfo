@@ -51,6 +51,6 @@ public class ClientTickHandler implements ITickHandler {
     {
     	//TODO: ADDED
     	SkinHandler sk = new SkinHandler();
-    	sk.cropHeadAndDisplay(FMLClientHandler.instance().getClient(), "Charsmud");
+    	//sk.cropHeadAndDisplay(FMLClientHandler.instance().getClient(), "Charsmud");
     }
 }
