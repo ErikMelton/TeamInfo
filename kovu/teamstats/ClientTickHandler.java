@@ -1,13 +1,22 @@
 package kovu.teamstats;
 
 import java.util.EnumSet;
+
+import kovu.utils.gui.GuiUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.src.ModLoader;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
+import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.network.Player;
 
 public class ClientTickHandler implements ITickHandler {
+	
+	private boolean guinotopen;
 
     @Override
     public void tickStart(EnumSet<TickType> type, Object... tickData) {
@@ -42,15 +51,21 @@ public class ClientTickHandler implements ITickHandler {
     }
 
     public void onTickInGUI(GuiScreen guiscreen) {
+    	
+    	guinotopen = false;
     }
 
     public void onTickInGame() {
+    	
+    	guinotopen = true;
     }
 
     public void onRenderTick() 
-    {
-    	//TODO: ADDED
+    {   	
+    	if(guinotopen == true)
+    	{
+    		GuiTeamInfoIngame.drawMain();
+    	}
     	SkinHandler sk = new SkinHandler();
-    	//sk.cropHeadAndDisplay(FMLClientHandler.instance().getClient(), "Charsmud");
     }
 }

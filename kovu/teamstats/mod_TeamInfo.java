@@ -31,6 +31,7 @@ public class mod_TeamInfo extends BaseMod {
     private static mod_TeamInfo instance;
     private static final Logger logger = Logger.getLogger(mod_TeamInfo.class.getName());
     SkinHandler sk;
+    public static GuiTeamInfoIngame ingame = new GuiTeamInfoIngame();
 
     public String getVersion() {
         return "For MC version 1.5.0";
