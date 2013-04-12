@@ -8,8 +8,6 @@ public class Kovu {
     public static Minecraft mc;
     public static boolean step = false;
     public static int stepheight = 1;
-    public static int xPos = 0;
-    public static int yPos = 0;
     public static boolean knockback = false;
     public static boolean blockhack = true;
     public static boolean isBlocking = false;

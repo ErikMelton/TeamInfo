@@ -70,7 +70,6 @@ public class GuiTeamInfoIngame extends GuiScreen {
 		}
 		font.drawStringWithShadow("TeamStats Dev 0.1.0", 2, 2, 0x00ff00);
 		clickableGuiMode(font);
-		//GuiUtils.drawBorderedRect(Kovu.xPos, Kovu.yPos, 100, 20, 255, 0, 0, 125, (float) 1.4, 0, 0, 0, 255);
 	}
 	
 	public void mouseDraggedMode(int i, int j)

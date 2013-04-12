@@ -119,9 +119,6 @@ public class mod_TeamInfo extends BaseMod {
                 "Chicken_nuggster",
                 "JurassicBerry"
             };
-            if (s == null) {
-                s = new String[0];
-            }
 
             if (i == 20) {
                 sendStats();
