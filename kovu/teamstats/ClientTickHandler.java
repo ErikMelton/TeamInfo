@@ -66,6 +66,5 @@ public class ClientTickHandler implements ITickHandler {
     	{
     		GuiTeamInfoIngame.drawMain();
     	}
-    	SkinHandler sk = new SkinHandler();
     }
 }

@@ -1,5 +1,13 @@
 package kovu.teamstats;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import org.lwjgl.opengl.GL11;
+
 import kovu.utils.gui.GuiUtils;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -54,6 +62,8 @@ public class GuiTeamInfoIngame extends GuiScreen {
 		fontRenderer.drawStringWithShadow("TeamStats Dev 0.1.0", 2, 2, 0x00ff00);
 		this.font = fontRenderer;
 		super.drawScreen(i, j, f);
+		getCroppedFacialImage("Rainfur");
+		drawTexturedModalRect(9, 9, 0, 0, 250, 300);
 		//GuiUtils.drawBorderedRect(100, 100, 500, 300, 0, 0, 0, 125, (float) 1.4, 0, 0, 0, 255);
 	}
 	
@@ -92,6 +102,21 @@ public class GuiTeamInfoIngame extends GuiScreen {
 		if(k == 0)
 		{
 			dragMode = false;
+		}
+	}
+	
+	public void getCroppedFacialImage(String username)
+	{
+		File skin = new File(mc.getMinecraftDir() + File.separator +
+				"dlskins" + File.separator + username + ".png");
+		try
+		{
+			BufferedImage skinBR = ImageIO.read(skin);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.allocateAndSetupTexture(skinBR));
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
 		}
 	}
 }
