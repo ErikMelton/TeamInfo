@@ -64,7 +64,8 @@ public class GuiTeamInfoIngame extends GuiScreen {
 		super.drawScreen(i, j, f);
 		GL11.glColor4f(1, 1, 1, 1);
 		getCroppedFacialImage("Rainfur");
-		drawTexturedModalRect(9, 9, 0, 0, 250, 300);
+		GL11.glScalef(.25F, .25F, 0);
+		drawTexturedModalRect(9, 9, 0, 0, 256, 256);
 //		GuiUtils.drawBorderedRect(100, 100, 500, 300, 0, 0, 0, 125, (float) 1.4, 0, 0, 0, 255);
 	}
 	
