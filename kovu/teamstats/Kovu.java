@@ -12,6 +12,7 @@ public class Kovu {
     public static boolean armour = true;
     public static boolean noarmour = true;
     public static boolean coords = false;
+    public static boolean isInGUI = false;
     public static World world;
 
     public Kovu(Minecraft theMinecraft) {

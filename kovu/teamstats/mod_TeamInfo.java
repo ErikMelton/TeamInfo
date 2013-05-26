@@ -20,21 +20,31 @@ import net.minecraft.src.ModLoader;
 
 public class mod_TeamInfo extends BaseMod {
 
-    Boolean mcisloaded = false;
-    GuiScreen guiscreen;
-    Kovu kovu;
-    Minecraft mc = ModLoader.getMinecraftInstance();
-    public String rejectRequest;
-    EntityClientPlayerMP player;
-    int i = 0;
+    public boolean mcisloaded = false;
     public boolean minusActivated;
+    
+    public String rejectRequest;
+
+    public int i = 0;
+
+    public GuiScreen guiscreen;
+    
+    public Kovu kovu;
+    
+    public Minecraft mc = ModLoader.getMinecraftInstance();
+    
+    public EntityClientPlayerMP player;
+    
     private static mod_TeamInfo instance;
-    private static final Logger logger = Logger.getLogger(mod_TeamInfo.class.getName());
-    SkinHandler sk;
+    
+    public SkinHandler sk;
+    
     public static GuiTeamInfoIngame ingame = new GuiTeamInfoIngame();
+    private static final Logger logger = Logger.getLogger(mod_TeamInfo.class.getName());
+
 
     public String getVersion() {
-        return "For MC version 1.5.0";
+        return "For MC version 1.5.2";
     }
 
     public mod_TeamInfo() throws IllegalAccessException {
@@ -57,14 +67,20 @@ public class mod_TeamInfo extends BaseMod {
 
         if(keybinding.keyCode == Keyboard.KEY_0)
         {
-			ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfo(guiscreen));
-			sk.downloadSkin("Charsmud");
-			sk.downloadSkin("Rainfur");
+        	if(Kovu.isInGUI)
+        	{
+        		ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfo(guiscreen));
+        		sk.downloadSkin("Charsmud");
+        		sk.downloadSkin("Rainfur");
+        	}
         }
         if(keybinding.keyCode == Keyboard.KEY_EQUALS)
         {
-        	mc.thePlayer.addChatMessage("TeamStats configuration mode enabled");
-        	ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfoIngame());
+        	if(Kovu.isInGUI)
+        	{
+        		mc.thePlayer.addChatMessage("TeamStats configuration mode enabled");
+        		ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfoIngame());
+        	}
         }
     }
 

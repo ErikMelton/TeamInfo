@@ -16,8 +16,6 @@ import cpw.mods.fml.common.network.Player;
 
 public class ClientTickHandler implements ITickHandler {
 	
-	private boolean guinotopen;
-
     @Override
     public void tickStart(EnumSet<TickType> type, Object... tickData) {
     }
@@ -52,17 +50,17 @@ public class ClientTickHandler implements ITickHandler {
 
     public void onTickInGUI(GuiScreen guiscreen) {
     	
-    	guinotopen = false;
+    	Kovu.isInGUI = false;
     }
 
     public void onTickInGame() {
     	
-    	guinotopen = true;
+    	Kovu.isInGUI= true;
     }
 
     public void onRenderTick() 
     {   	
-    	if(guinotopen == true)
+    	if(Kovu.isInGUI == true)
     	{
     		GuiTeamInfoIngame.drawMain();
     	}
