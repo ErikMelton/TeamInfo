@@ -28,6 +28,7 @@ public class GuiTeamInfoIngame extends GuiScreen {
 	public int green = 0x2200ff00;
 	public static FontRenderer font;
 	
+	private GuiTeamInfoIngame instance;
 	
 	public void mouseClicked(int i, int j, int k)
 	{
@@ -53,16 +54,18 @@ public class GuiTeamInfoIngame extends GuiScreen {
 			drawRect(0 + dragModeX, 0 + dragModeY, 120 + dragModeX, 36 + dragModeY, 0x2200ff00);
 		}
 		fr.drawStringWithShadow(ModLoader.getMinecraftInstance().thePlayer.username, 5 + dragModeX, 2 + dragModeY, 0xfffffa);
+		mod_TeamInfo.ingame.processAndUpdateImages(200 + dragModeX, 2 + dragModeY);
 	}
 	
 	public void drawScreen(int i, int j, float f)
 	{
+		instance = this;
 		mouseDraggedMode(i, j);
 		clickableGuiMode(fontRenderer);
+		processAndUpdateImages(0,0);
 		fontRenderer.drawStringWithShadow("TeamStats Dev 0.1.0", 2, 2, 0x00ff00);
 		this.font = fontRenderer;
 		super.drawScreen(i, j, f);
-		processAndUpdateImages();
 //		GuiUtils.drawBorderedRect(100, 100, 500, 300, 0, 0, 0, 125, (float) 1.4, 0, 0, 0, 255);
 	}
 	
@@ -120,11 +123,11 @@ public class GuiTeamInfoIngame extends GuiScreen {
 		}
 	}
 	
-	public void processAndUpdateImages()
+	public void processAndUpdateImages(int x, int y)
 	{
 		GL11.glColor4f(1, 1, 1, 1);
 		getCroppedFacialImage("Rainfur");
 		GL11.glScalef(.10F, .10F, 0);
-		drawTexturedModalRect(0, 0, 0, 0, 256, 256);
+		drawTexturedModalRect(x, y, 0, 0, 256, 256);
 	}
 }

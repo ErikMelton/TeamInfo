@@ -79,7 +79,7 @@ public class mod_TeamInfo extends BaseMod {
         	if(Kovu.isInGUI)
         	{
         		mc.thePlayer.addChatMessage("TeamStats configuration mode enabled");
-        		ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfoIngame());
+        		ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, ingame = new GuiTeamInfoIngame());
         	}
         }
     }
