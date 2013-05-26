@@ -39,6 +39,7 @@ public class SkinHandler {
     
 	private BufferedImage img;
 	private int imgID = 1000;
+	private FileOutputStream fos;
 	
 	public void makeSkinDir()
 	{
@@ -51,7 +52,7 @@ public class SkinHandler {
 		{
 			URL skin = new URL(username);
 		    ReadableByteChannel rbc = Channels.newChannel(skin.openStream());
-		    FileOutputStream fos = new FileOutputStream(skinFolder + "\\" + playerName + ".png");
+		    fos = new FileOutputStream(skinFolder + "\\" + playerName + ".png");
 		    fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		}
 		catch(Exception ex)
@@ -67,16 +68,9 @@ public class SkinHandler {
                 InputStream inputstream = new FileInputStream(texture);
                 int[] aint1;
 
-                if (inputstream == null)
-                {
-                    aint1 = this.getImageContentsAndAllocate(this.missingTextureImage);
-                }
-                else
-                {
-                    BufferedImage bufferedimage = this.readTextureImage(inputstream);
-                    TextureFXManager.instance().fixTransparency(bufferedimage, texture);
-                    aint1 = this.getImageContentsAndAllocate(bufferedimage);
-                }
+                BufferedImage bufferedimage = this.readTextureImage(inputstream);
+				TextureFXManager.instance().fixTransparency(bufferedimage, texture);
+				aint1 = this.getImageContentsAndAllocate(bufferedimage);
 
                 this.textureContentsMap.put(texture, aint1);
                 return aint1;

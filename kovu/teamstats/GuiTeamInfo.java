@@ -30,10 +30,10 @@ public class GuiTeamInfo extends GuiScreen {
 
     public void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 0) {
-            mc.displayGuiScreen(new GuiAddtoTeam(parentScreen));
+            mc.displayGuiScreen(new GuiAddtoTeam(this));
         }
         if (guibutton.id == 1) {
-            mc.displayGuiScreen(new GuiRemoveFromTeam(parentScreen));
+            mc.displayGuiScreen(new GuiRemoveFromTeam(this));
         }
         if (guibutton.id == 2) {
             mc.displayGuiScreen(new GuiTeamInfoConfig(this));

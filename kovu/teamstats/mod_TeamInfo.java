@@ -58,7 +58,6 @@ public class mod_TeamInfo extends BaseMod {
         if(keybinding.keyCode == Keyboard.KEY_0)
         {
 			ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfo(guiscreen));
-			//TODO:  MOVE THE DOWNLOADS
 			sk.downloadSkin("Charsmud");
 			sk.downloadSkin("Rainfur");
         }

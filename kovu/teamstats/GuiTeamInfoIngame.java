@@ -72,7 +72,7 @@ public class GuiTeamInfoIngame extends GuiScreen {
 		{
 			if(init == false)
 			{
-				ModLoader.getMinecraftInstance().thePlayer.addChatMessage(EnumChatFormatting.GREEN+"Please press = to initialize and customize TeamStats"+EnumChatFormatting.RESET);
+				ModLoader.getMinecraftInstance().thePlayer.addChatMessage(EnumChatFormatting.GREEN+"Please press 0 and then = to initialize and customize TeamStats"+EnumChatFormatting.RESET);
 				init = true;
 			}
 			return;
