@@ -28,6 +28,7 @@ public class GuiTeamInfoConfig extends GuiScreen {
         buttonList.add(new GuiButton(3, width / 2 - 155, height / 2 + 5 + 24, 100, 20, (new StringBuilder()).append("Co-ords ").append(Kovu.coords ? "On" : "Off").toString()));
         buttonList.add(new GuiButton(4, width / 2 - 50, height / 2 + 5 + 24, 100, 20, (new StringBuilder()).append("Hunger ").append(Kovu.hunger ? "On" : "Off").toString()));
         buttonList.add(new GuiButton(5, width / 2 + 55, height / 2 + 5 + 24, 100, 20, "Back"));
+        //TODO: Add new button that says more options
     }
 
     public void actionPerformed(GuiButton guibutton) {
