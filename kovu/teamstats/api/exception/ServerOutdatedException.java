@@ -1,4 +1,4 @@
-package kovu.ralex.teamstats.api.exception;
+package kovu.teamstats.api.exception;
 
 /**
  * @since 0.1

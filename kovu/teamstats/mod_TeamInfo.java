@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import kovu.ralex.teamstats.api.TeamStatsAPI;
-
 import org.lwjgl.input.Keyboard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -17,6 +15,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.potion.Potion;
 import net.minecraft.src.BaseMod;
 import net.minecraft.src.ModLoader;
+import kovu.teamstats.api.*;
 
 public class mod_TeamInfo extends BaseMod {
 

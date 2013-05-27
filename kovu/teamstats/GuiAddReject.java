@@ -2,10 +2,11 @@ package kovu.teamstats;
 
 import java.io.IOException;
 
-import kovu.ralex.teamstats.api.TeamStatsAPI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+
+import kovu.teamstats.api.*;
 
 public class GuiAddReject extends GuiScreen {
 

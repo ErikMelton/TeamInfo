@@ -1,4 +1,4 @@
-package kovu.ralex.teamstats.api;
+package kovu.teamstats.api;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -12,8 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import kovu.ralex.teamstats.api.exception.*;
-import kovu.ralex.teamstats.api.list.TSAList;
+import kovu.teamstats.api.exception.CreationNotCompleteException;
+import kovu.teamstats.api.exception.ServerConnectionLostException;
+import kovu.teamstats.api.exception.ServerOutdatedException;
+import kovu.teamstats.api.exception.ServerRejectionException;
+import kovu.teamstats.api.list.TSAList;
 
 /**
  * The TeamStats API class. This handles all the server-related requests. This
