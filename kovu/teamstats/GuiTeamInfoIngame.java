@@ -51,10 +51,10 @@ public class GuiTeamInfoIngame extends GuiScreen {
 		}
 		else
 		{
-			drawRect(0 + dragModeX, 0 + dragModeY, 120 + dragModeX, 36 + dragModeY, 0x2200ff00);
+			drawRect(0 + dragModeX, 0 + dragModeY, 150 + dragModeX, 36 + dragModeY, 0x2200ff00);
 		}
 		fr.drawStringWithShadow(ModLoader.getMinecraftInstance().thePlayer.username, 5 + dragModeX, 2 + dragModeY, 0xfffffa);
-		mod_TeamInfo.ingame.processAndUpdateImages(200 + dragModeX, 2 + dragModeY);
+		mod_TeamInfo.ingame.processAndUpdateImages(1200 + (dragModeX * 10), 50 + (dragModeY * 10));
 	}
 	
 	public void drawScreen(int i, int j, float f)
