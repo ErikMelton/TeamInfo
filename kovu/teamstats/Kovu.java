@@ -15,6 +15,8 @@ public class Kovu {
     public static boolean noarmour = true;
     public static boolean coords = false;
     public static boolean isInGUI = false;
+    public static boolean isVersion = true;
+    
     public static World world;
 
     public static ArrayList<String> friends = new ArrayList<String>();

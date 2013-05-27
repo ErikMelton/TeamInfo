@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import kovu.teamstats.Kovu;
 import kovu.teamstats.mod_TeamInfo;
 
 import net.minecraft.client.gui.FontRenderer;
@@ -64,7 +65,10 @@ public class GuiTeamInfoIngame extends GuiScreen {
 		mouseDraggedMode(i, j);
 		clickableGuiMode(fontRenderer);
 		processAndUpdateImages(0,0);
-		fontRenderer.drawStringWithShadow("TeamStats Dev 0.1.0", 2, 2, 0x00ff00);
+		if(Kovu.isVersion)
+		{
+			fontRenderer.drawStringWithShadow("TeamStats Dev 0.4.0", 2, 2, 0x00ff00);
+		}
 		this.font = fontRenderer;
 		super.drawScreen(i, j, f);
 //		GuiUtils.drawBorderedRect(100, 100, 500, 300, 0, 0, 0, 125, (float) 1.4, 0, 0, 0, 255);
@@ -81,7 +85,10 @@ public class GuiTeamInfoIngame extends GuiScreen {
 			}
 			return;
 		}
-		font.drawStringWithShadow("TeamStats Dev 0.1.0", 2, 2, 0x00ff00);
+		if(Kovu.isVersion)
+		{
+			font.drawStringWithShadow("TeamStats Dev 0.4.0", 2, 2, 0x00ff00);
+		}
 		clickableGuiMode(font);
 	}
 	

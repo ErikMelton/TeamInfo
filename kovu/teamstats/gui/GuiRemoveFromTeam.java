@@ -62,9 +62,7 @@ public class GuiRemoveFromTeam extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         buttonList.clear();
         players = 0;
-        friends = new String[2];
-        friends[0] = "Rainfur";
-        friends[1] = "Testing";
+        friends = new String[0];
         try {
             //friends = FriendModApi.getFriends().clone();
         } catch (Exception e) {
@@ -72,8 +70,9 @@ public class GuiRemoveFromTeam extends GuiScreen {
         }
         System.out.println(friends);
         java.util.List list = Arrays.asList(friends);
-
-        for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+        //TODO: Once actual server is up, use the server instead
+        //for(Iterator iterator = list.iterator(); iterator.hasNext();) {
+        for (Iterator iterator = Kovu.friends.iterator(); iterator.hasNext();) {
             String s = (String) iterator.next();
             if (players % 2 == 0) {
             	buttonList.add(new GuiButton(players, width / 2 - 90, (height / 2 - 20) + 23 * (players / 2), 80, 20, s));

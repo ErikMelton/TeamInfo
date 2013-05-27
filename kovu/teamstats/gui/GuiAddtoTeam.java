@@ -38,6 +38,7 @@ public class GuiAddtoTeam extends GuiScreen {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            Kovu.friends.add(s);
             mc.thePlayer.addChatMessage((new StringBuilder()).append("A request has been sent to \247c").append(serverTextField.getText()).toString());
             mc.displayGuiScreen(null);
         }
