@@ -1,10 +1,12 @@
-package kovu.teamstats;
+package kovu.teamstats.gui;
 
+import kovu.teamstats.Kovu;
+import kovu.teamstats.api.TeamStatsAPI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+
 import org.lwjgl.input.Keyboard;
-import kovu.teamstats.api.*;
 
 public class GuiAddtoTeam extends GuiScreen {
 

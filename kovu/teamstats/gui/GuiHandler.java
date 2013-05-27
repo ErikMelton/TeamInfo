@@ -1,4 +1,4 @@
-package kovu.teamstats;
+package kovu.teamstats.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;

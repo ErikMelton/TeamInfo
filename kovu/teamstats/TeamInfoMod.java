@@ -1,5 +1,6 @@
 package kovu.teamstats;
 
+import kovu.teamstats.gui.GuiHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;

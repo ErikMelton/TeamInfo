@@ -1,5 +1,7 @@
 package kovu.teamstats;
 
+import java.util.ArrayList;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 
@@ -15,6 +17,8 @@ public class Kovu {
     public static boolean isInGUI = false;
     public static World world;
 
+    public static ArrayList<String> friends = new ArrayList<String>();
+    
     public Kovu(Minecraft theMinecraft) {
         mc = theMinecraft;
     }

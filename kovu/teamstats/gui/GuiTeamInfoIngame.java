@@ -1,4 +1,4 @@
-package kovu.teamstats;
+package kovu.teamstats.gui;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -6,13 +6,14 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.lwjgl.opengl.GL11;
+import kovu.teamstats.mod_TeamInfo;
 
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.src.ModLoader;
 import net.minecraft.util.EnumChatFormatting;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiTeamInfoIngame extends GuiScreen {
 	

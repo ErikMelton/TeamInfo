@@ -2,6 +2,7 @@ package kovu.teamstats;
 
 import java.util.EnumSet;
 
+import kovu.teamstats.gui.GuiTeamInfoIngame;
 import kovu.utils.gui.GuiUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;

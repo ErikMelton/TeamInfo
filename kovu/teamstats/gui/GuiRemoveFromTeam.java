@@ -1,13 +1,15 @@
-package kovu.teamstats;
+package kovu.teamstats.gui;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import kovu.teamstats.api.*;
+import kovu.teamstats.Kovu;
+import kovu.teamstats.api.TeamStatsAPI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+
 import org.lwjgl.input.Keyboard;
 
 public class GuiRemoveFromTeam extends GuiScreen {

@@ -16,6 +16,8 @@ import net.minecraft.potion.Potion;
 import net.minecraft.src.BaseMod;
 import net.minecraft.src.ModLoader;
 import kovu.teamstats.api.*;
+import kovu.teamstats.gui.GuiTeamInfo;
+import kovu.teamstats.gui.GuiTeamInfoIngame;
 
 public class mod_TeamInfo extends BaseMod {
 
