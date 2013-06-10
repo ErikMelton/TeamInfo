@@ -1,8 +1,6 @@
 package kovu.teamstats;
 
-import java.awt.RenderingHints.Key;
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,39 +21,39 @@ public class mod_TeamInfo extends BaseMod {
 
     public boolean mcisloaded = false;
     public boolean minusActivated;
-    
     public String rejectRequest;
-
     public int i = 0;
-
     public GuiScreen guiscreen;
-    
     public Kovu kovu;
-    
     public Minecraft mc = ModLoader.getMinecraftInstance();
-    
     public EntityClientPlayerMP player;
-    
     private static mod_TeamInfo instance;
-    
     public SkinHandler sk;
-    
     public static GuiTeamInfoIngame ingame = new GuiTeamInfoIngame();
     private static final Logger logger = Logger.getLogger(mod_TeamInfo.class.getName());
-
+    private final TeamStatsAPI api;
 
     public String getVersion() {
         return "For MC version 1.5.2";
     }
 
     public mod_TeamInfo() throws IllegalAccessException {
-		sk = new SkinHandler();
+        sk = new SkinHandler();
 
         if (instance == null) {
             instance = this;
         } else {
             throw new IllegalAccessException("Attemped to recreate instance for TeamStats");
         }
+        TeamStatsAPI temp;
+        try {
+            temp = new TeamStatsAPI(mc.session.username, mc.session.sessionId);
+        } catch (IOException ex) {
+            temp = null;
+            logger.log(Level.SEVERE, "An error has occured", ex);
+        }
+        api = temp;
+        TeamStatsAPI.setAPI(api);
         ModLoader.registerKey(instance, new KeyBinding("TStats", Keyboard.KEY_0), false);
         ModLoader.registerKey(instance, new KeyBinding("Change Location", Keyboard.KEY_EQUALS), false);
         ModLoader.setInGameHook(instance, true, true);
@@ -66,33 +64,22 @@ public class mod_TeamInfo extends BaseMod {
     @Override
     public void keyboardEvent(KeyBinding keybinding) {
 
-        if(keybinding.keyCode == Keyboard.KEY_0)
-        {
-        	if(Kovu.isInGUI)
-        	{
-        		ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfo(guiscreen));
-        		sk.downloadSkin("Charsmud");
-        		sk.downloadSkin("Rainfur");
-        	}
+        if (keybinding.keyCode == Keyboard.KEY_0) {
+            if (Kovu.isInGUI) {
+                ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfo(guiscreen));
+                sk.downloadSkin("Charsmud");
+                sk.downloadSkin("Rainfur");
+            }
         }
-        if(keybinding.keyCode == Keyboard.KEY_EQUALS)
-        {
-        	if(Kovu.isInGUI)
-        	{
-        		mc.thePlayer.addChatMessage("TeamStats configuration mode enabled");
-        		ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, ingame = new GuiTeamInfoIngame());
-        	}
+        if (keybinding.keyCode == Keyboard.KEY_EQUALS) {
+            if (Kovu.isInGUI) {
+                mc.thePlayer.addChatMessage("TeamStats configuration mode enabled");
+                ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, ingame = new GuiTeamInfoIngame());
+            }
         }
     }
 
     public void load() {
-        try {
-            TeamStatsAPI.setupApi(mc.session.username, mc.session.sessionId);
-        } catch (UnknownHostException ex) {
-            logger.log(Level.SEVERE, "An error has occured", ex);
-        } catch (IOException ex) {
-            logger.log(Level.SEVERE, "An error has occured", ex);
-        }
     }
 
     public void sendStats() {
@@ -113,7 +100,7 @@ public class mod_TeamInfo extends BaseMod {
         stats.put("OF", kovu.mc.thePlayer.isBurning());
 
         try {
-            TeamStatsAPI.updateStats(stats);
+            api.updateStats(stats);
         } catch (IOException e) {
             logger.log(Level.SEVERE, "An error has occured", e);
         }

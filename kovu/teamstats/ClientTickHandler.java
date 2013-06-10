@@ -3,17 +3,10 @@ package kovu.teamstats;
 import java.util.EnumSet;
 
 import kovu.teamstats.gui.GuiTeamInfoIngame;
-import kovu.utils.gui.GuiUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.src.ModLoader;
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.TickType;
-import cpw.mods.fml.common.network.Player;
 
 public class ClientTickHandler implements ITickHandler {
 	
