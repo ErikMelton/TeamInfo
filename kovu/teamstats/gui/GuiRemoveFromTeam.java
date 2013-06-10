@@ -39,7 +39,7 @@ public class GuiRemoveFromTeam extends GuiScreen {
     public void drawScreen(int i, int j, float f) {
         try {
 
-            i = TeamStatsAPI.getFriends().length;
+            i = TeamStatsAPI.getAPI().getFriends().length;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,9 +75,9 @@ public class GuiRemoveFromTeam extends GuiScreen {
         for (Iterator iterator = Kovu.friends.iterator(); iterator.hasNext();) {
             String s = (String) iterator.next();
             if (players % 2 == 0) {
-            	buttonList.add(new GuiButton(players, width / 2 - 90, (height / 2 - 20) + 23 * (players / 2), 80, 20, s));
+                buttonList.add(new GuiButton(players, width / 2 - 90, (height / 2 - 20) + 23 * (players / 2), 80, 20, s));
             } else {
-            	buttonList.add(new GuiButton(players, width / 2 + 10, (height / 2 - 20) + 23 * (players / 2), 80, 20, s));
+                buttonList.add(new GuiButton(players, width / 2 + 10, (height / 2 - 20) + 23 * (players / 2), 80, 20, s));
             }
             players++;
         }
@@ -104,7 +104,7 @@ public class GuiRemoveFromTeam extends GuiScreen {
             if (guibutton.id == i) {
                 try {
                     System.out.println("Inside of" + i);
-                    TeamStatsAPI.removeFriend(s1);
+                    TeamStatsAPI.getAPI().removeFriend(s1);
                     buttonList.remove(i);
                 } catch (IOException e) {
 

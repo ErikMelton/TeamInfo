@@ -38,7 +38,7 @@ public class GuiAddReject extends GuiScreen {
     public void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 0) {
             try {
-                TeamStatsAPI.addFriend(playername);
+                TeamStatsAPI.getAPI().addFriend(playername);
             } catch (IOException e) {
                 e.printStackTrace();
             }
