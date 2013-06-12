@@ -473,10 +473,10 @@ public final class TeamStatsAPI {
                     packetSender.sendPacket(packet);
                     String[] friends;
                     Packet reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
-                    if (!(Boolean) reply.getData("valid")) {
+                    if (!(Boolean) reply.getData("reply")) {
                         throw new ServerRejectionException();
                     }
-                    friends = ((String) packet.getData("friends")).split(" ");
+                    friends = ((String) packet.getData("names")).split(" ");
 
                     //check current friend list, removing and adding name differences
                     List<String> addFriend = new TSAList<String>();
@@ -489,7 +489,7 @@ public final class TeamStatsAPI {
                         packet.addData("name", name);
                         packetSender.sendPacket(packet);
                         reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
-                        if (!(Boolean) reply.getData("valid")) {
+                        if (!(Boolean) reply.getData("reply")) {
                             throw new ServerRejectionException();
                         }
                     }
@@ -504,7 +504,7 @@ public final class TeamStatsAPI {
                         packet.addData("name", name);
                         packetSender.sendPacket(packet);
                         reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
-                        if (!(Boolean) reply.getData("valid")) {
+                        if (!(Boolean) reply.getData("reply")) {
                             throw new ServerRejectionException();
                         }
                     }
@@ -518,7 +518,7 @@ public final class TeamStatsAPI {
                     packet = new Packet(ClientRequest.UPDATESTATS);
                     packet.addData("stats", pStats);
                     reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
-                    if (!(Boolean) reply.getData("valid")) {
+                    if (!(Boolean) reply.getData("reply")) {
                         throw new ServerRejectionException();
                     }
 
@@ -526,7 +526,7 @@ public final class TeamStatsAPI {
                     packet = new Packet(ClientRequest.GETREQUESTS);
                     packetSender.sendPacket(packet);
                     reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
-                    if (!(Boolean) reply.getData("valid")) {
+                    if (!(Boolean) reply.getData("reply")) {
                         throw new ServerRejectionException();
                     }
                     String names = (String) reply.getData("names");
@@ -544,7 +544,7 @@ public final class TeamStatsAPI {
                     packet = new Packet(ClientRequest.GETFRIENDS);
                     packetSender.sendPacket(packet);
                     reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
-                    if (!(Boolean) reply.getData("valid")) {
+                    if (!(Boolean) reply.getData("reply")) {
                         throw new ServerRejectionException();
                     }
                     List<String> updateFriends = Arrays.asList(((String) reply.getData("names")).split(" "));
@@ -571,7 +571,7 @@ public final class TeamStatsAPI {
                         send.addData("name", friendName);
                         packetSender.sendPacket(send);
                         reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
-                        if (!(Boolean) reply.getData("valid")) {
+                        if (!(Boolean) reply.getData("reply")) {
                             throw new ServerRejectionException();
                         }
                         String stat = (String) reply.getData("stats");
@@ -586,10 +586,10 @@ public final class TeamStatsAPI {
                         send2.addData("name", friendName);
                         packetSender.sendPacket(send2);
                         reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
-                        if (!(Boolean) reply.getData("valid")) {
+                        if (!(Boolean) reply.getData("reply")) {
                             throw new ServerRejectionException();
                         }
-                        boolean isOnline = (Boolean) reply.getData("reply");
+                        boolean isOnline = (Boolean) reply.getData("online");
                         if (isOnline) {
                             onlineFriends.add(friendName);
                         }
