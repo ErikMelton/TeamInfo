@@ -1,8 +1,8 @@
 package kovu.teamstats.api;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,19 +14,24 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kovu.teamstats.api.exception.CreationNotCompleteException;
 import kovu.teamstats.api.exception.ServerConnectionLostException;
 import kovu.teamstats.api.exception.ServerOutdatedException;
 import kovu.teamstats.api.exception.ServerRejectionException;
 import kovu.teamstats.api.list.TSAList;
+import net.ae97.teamstats.ClientRequest;
+import net.ae97.teamstats.networking.Packet;
+import net.ae97.teamstats.networking.PacketListener;
+import net.ae97.teamstats.networking.PacketSender;
 
 /**
  * The TeamStats API class. This handles all the server-related requests. This
  * should be used to get info from the server.
  *
  * @author Lord_Ralex
- * @version 0.2
+ * @version 0.3
  * @since 0.1
  */
 public final class TeamStatsAPI {
@@ -37,8 +42,8 @@ public final class TeamStatsAPI {
     private String name;
     private String session;
     private Socket connection;
-    private DataInputStream input;
-    private DataOutputStream output;
+    private final PacketListener packetListener;
+    private final PacketSender packetSender;
     private final List<String> friendList = new TSAList<String>();
     private final Map<String, Map<String, Object>> friendStats = new ConcurrentHashMap<String, Map<String, Object>>();
     private final List<String> friendRequests = new TSAList<String>();
@@ -50,7 +55,7 @@ public final class TeamStatsAPI {
     private final List<String> onlineFriends = new TSAList<String>();
     private final int UPDATE_TIMER = 60; //time this means is set when sent to executor service
     private boolean online = false;
-    private short API_VERSION = 1;
+    private short API_VERSION = 2;
     private boolean was_set_up = false;
     private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
     private final ScheduledFuture task;
@@ -62,32 +67,41 @@ public final class TeamStatsAPI {
         SERVER_PORT = 0;
     }
 
-    public TeamStatsAPI(String aName, String aSession) throws ServerRejectionException, IOException {
+    public TeamStatsAPI(String aName, String aSession) throws ServerRejectionException, IOException, ClassNotFoundException {
         name = aName;
         session = aSession;
         connection = new Socket(MAIN_SERVER_URL, SERVER_PORT);
-        input = new DataInputStream(connection.getInputStream());
-        output = new DataOutputStream(connection.getOutputStream());
-        output.writeUTF("GETSERVER");
-        String SERVER_URL = input.readUTF();
+        PacketSender tempSender = new PacketSender(connection.getOutputStream());
+        PacketListener tempListener = new PacketListener(connection.getInputStream());
+        Packet getServer = new Packet(ClientRequest.GETSERVER);
+        tempSender.sendPacket(getServer);
+        Packet p = tempListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+        String SERVER_URL = null;
+        Object o = p.getData("ip");
+        if (o instanceof String) {
+            SERVER_URL = (String) o;
+        }
         connection.close();
 
-        if (SERVER_URL.equalsIgnoreCase("NONODE")) {
+        if (SERVER_URL == null || SERVER_URL.equalsIgnoreCase("NONODE")) {
             throw new ServerRejectionException("There is no node open");
         }
 
-        String link = SERVER_URL.split(":")[0];
-        int port = Integer.parseInt(SERVER_URL.split(":")[1]);
-        short server_version = Short.parseShort(SERVER_URL.split(" ")[1]);
+        String link = (String) p.getData("ip");
+        int port = (Integer) p.getData("port");
+        short server_version = (Short) p.getData("version");
         if (server_version != API_VERSION) {
             throw new ServerOutdatedException();
 
         }
         connection = new Socket(link, port);
-        input = new DataInputStream(connection.getInputStream());
-        output = new DataOutputStream(connection.getOutputStream());
-        output.writeUTF(name + " " + session);
-        boolean isAccepted = input.readBoolean();
+        packetListener = new PacketListener(connection.getInputStream());
+        packetSender = new PacketSender(connection.getOutputStream());
+        Packet pac = new Packet(ClientRequest.OPENCONNECTION);
+        pac.addData("name", name).addData("session", session);
+        packetSender.sendPacket(pac);
+        Packet response = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+        boolean isAccepted = (Boolean) response.getData("reply");
         if (!isAccepted) {
             throw new ServerRejectionException();
         }
@@ -391,8 +405,11 @@ public final class TeamStatsAPI {
     public boolean changeOnlineStatus(boolean newStatus) throws IOException {
         wasSetup();
         online = newStatus;
-        output.writeUTF("CHANGEONLINE " + session + " " + (online ? "1" : "0"));
-        if (input.readBoolean()) {
+        Packet packet = new Packet(ClientRequest.CHANGEONLINE);
+        packet.addData("online", online);
+        packetSender.sendPacket(packet);
+        Packet reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+        if ((Boolean) reply.getData("reply")) {
             return online;
         } else {
             throw new ServerRejectionException();
@@ -452,13 +469,14 @@ public final class TeamStatsAPI {
         public void run() {
             if (online) {
                 try {
-                    output.writeUTF("GETFRIENDS " + session);
+                    Packet packet = new Packet(ClientRequest.GETFRIENDS);
+                    packetSender.sendPacket(packet);
                     String[] friends;
-                    if (input.readBoolean()) {
-                        friends = input.readUTF().split(" ");
-                    } else {
+                    Packet reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                    if (!(Boolean) reply.getData("valid")) {
                         throw new ServerRejectionException();
                     }
+                    friends = ((String) packet.getData("friends")).split(" ");
 
                     //check current friend list, removing and adding name differences
                     List<String> addFriend = new TSAList<String>();
@@ -467,9 +485,11 @@ public final class TeamStatsAPI {
                         addFriend.remove(existing);
                     }
                     for (String name : addFriend) {
-                        output.writeUTF("ADDFRIEND " + session + " " + name);
-                        if (input.readBoolean()) {
-                        } else {
+                        packet = new Packet(ClientRequest.ADDFRIEND);
+                        packet.addData("name", name);
+                        packetSender.sendPacket(packet);
+                        reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                        if (!(Boolean) reply.getData("valid")) {
                             throw new ServerRejectionException();
                         }
                     }
@@ -480,9 +500,11 @@ public final class TeamStatsAPI {
                         removeFriend.remove(existing);
                     }
                     for (String name : removeFriend) {
-                        output.writeUTF("REMOVEFRIEND " + session + " " + name);
-                        if (input.readBoolean()) {
-                        } else {
+                        packet = new Packet(ClientRequest.REMOVEFRIEND);
+                        packet.addData("name", name);
+                        packetSender.sendPacket(packet);
+                        reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                        if (!(Boolean) reply.getData("valid")) {
                             throw new ServerRejectionException();
                         }
                     }
@@ -492,75 +514,84 @@ public final class TeamStatsAPI {
                     for (String key : stats.keySet()) {
                         pStats += key + ":" + stats.get(key) + " ";
                     }
-                    output.writeUTF("UPDATESTATS " + session + " " + pStats);
-                    if (input.readBoolean()) {
-                    } else {
+                    pStats = pStats.trim();
+                    packet = new Packet(ClientRequest.UPDATESTATS);
+                    packet.addData("stats", pStats);
+                    reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                    if (!(Boolean) reply.getData("valid")) {
                         throw new ServerRejectionException();
                     }
 
                     //check friend requests
-                    output.writeUTF("GETREQUESTS " + session);
-                    if (input.readBoolean()) {
-                        String names = input.readUTF();
-                        String[] old = friendRequests.toArray(new String[0]);
-                        friendRequests.clear();
-                        friendRequests.addAll(Arrays.asList(names.split(" ")));
-                        if (newRequests.containsAll(Arrays.asList(old))) {
-                        }
-                        for (String name : old) {
-                            if (!newRequests.contains(name)) {
-                                newRequests.add(name);
-                            }
-                        }
-                    } else {
+                    packet = new Packet(ClientRequest.GETREQUESTS);
+                    packetSender.sendPacket(packet);
+                    reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                    if (!(Boolean) reply.getData("valid")) {
                         throw new ServerRejectionException();
+                    }
+                    String names = (String) reply.getData("names");
+                    String[] old = friendRequests.toArray(new String[0]);
+                    friendRequests.clear();
+                    friendRequests.addAll(Arrays.asList(names.split(" ")));
+                    if (newRequests.containsAll(Arrays.asList(old))) {
+                    }
+                    for (String name : old) {
+                        if (!newRequests.contains(name)) {
+                            newRequests.add(name);
+                        }
                     }
 
-                    output.writeUTF("GETFRIENDS " + session);
-                    if (input.readBoolean()) {
-                        List<String> updateFriends = Arrays.asList(input.readUTF().split(" "));
-                        for (String name : updateFriends) {
-                            if (friendList.contains(name)) {
-                                continue;
-                            }
-                            newFriends.add(name);
-                        }
-                        for (String name : friendList) {
-                            if (updateFriends.contains(name)) {
-                                continue;
-                            }
-                            newlyRemovedFriends.add(name);
-                        }
-                        friendList.clear();
-                        friendList.addAll(updateFriends);
-                    } else {
+                    packet = new Packet(ClientRequest.GETFRIENDS);
+                    packetSender.sendPacket(packet);
+                    reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                    if (!(Boolean) reply.getData("valid")) {
                         throw new ServerRejectionException();
                     }
+                    List<String> updateFriends = Arrays.asList(((String) reply.getData("names")).split(" "));
+                    for (String name : updateFriends) {
+                        if (friendList.contains(name)) {
+                            continue;
+                        }
+                        newFriends.add(name);
+                    }
+                    for (String name : friendList) {
+                        if (updateFriends.contains(name)) {
+                            continue;
+                        }
+                        newlyRemovedFriends.add(name);
+                    }
+                    friendList.clear();
+                    friendList.addAll(updateFriends);
 
                     //get stats for friends in list
                     friendStats.clear();
                     onlineFriends.clear();
                     for (String friendName : friendList) {
-                        output.writeUTF("GETSTATS " + session + " " + friendName);
-                        if (input.readBoolean()) {
-                            String stat = input.readUTF();
-                            Map<String, Object> friendS = new HashMap<String, Object>();
-                            String[] parts = stat.split(" ");
-                            for (String string : parts) {
-                                friendS.put(string.split(":")[0].toLowerCase().trim(), string.split(":")[1]);
-                            }
-                            friendStats.put(friendName, friendS);
-                        } else {
+                        Packet send = new Packet(ClientRequest.GETSTATS);
+                        send.addData("name", friendName);
+                        packetSender.sendPacket(send);
+                        reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                        if (!(Boolean) reply.getData("valid")) {
                             throw new ServerRejectionException();
                         }
-                        output.writeUTF("GETONLINESTATUS " + session + " " + friendName);
-                        if (input.readBoolean()) {
-                            boolean isOnline = input.readBoolean();
-                            if (isOnline) {
-                                onlineFriends.add(friendName);
-                            }
-                        } else {
+                        String stat = (String) reply.getData("stats");
+                        Map<String, Object> friendS = new HashMap<String, Object>();
+                        String[] parts = stat.split(" ");
+                        for (String string : parts) {
+                            friendS.put(string.split(":")[0].toLowerCase().trim(), string.split(":")[1]);
+                        }
+                        friendStats.put(friendName, friendS);
+
+                        Packet send2 = new Packet(ClientRequest.GETONLINESTATUS);
+                        send2.addData("name", friendName);
+                        packetSender.sendPacket(send2);
+                        reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                        if (!(Boolean) reply.getData("valid")) {
                             throw new ServerRejectionException();
+                        }
+                        boolean isOnline = (Boolean) reply.getData("reply");
+                        if (isOnline) {
+                            onlineFriends.add(friendName);
                         }
                     }
 
