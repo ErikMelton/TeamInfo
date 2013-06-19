@@ -46,4 +46,15 @@ public class Packet implements Serializable {
     public boolean isAlive() {
         return isAlive;
     }
+
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Packet{obj=")
+                .append(super.toString())
+                .append(", id=")
+                .append(this.getID())
+                .append(", data=")
+                .append(data);
+        return builder.toString();
+    }
 }
