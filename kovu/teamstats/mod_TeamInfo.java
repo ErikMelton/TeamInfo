@@ -48,9 +48,14 @@ public class mod_TeamInfo extends BaseMod {
         TeamStatsAPI temp;
         try {
             temp = new TeamStatsAPI(mc.session.username, mc.session.sessionId);
+            if (temp == null) {
+                throw new NullPointerException("API is null");
+            }
         } catch (Exception ex) {
             temp = null;
-            logger.log(Level.SEVERE, "An error has occured", ex);
+            System.out.println("We had an error on the API");
+            System.out.println(ex.getMessage());
+            System.out.println(ex.getStackTrace());
         }
         api = temp;
         TeamStatsAPI.setAPI(api);
