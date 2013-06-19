@@ -3,6 +3,8 @@ package net.ae97.teamstats.networking;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import kovu.teamstats.mod_TeamInfo;
+import net.ae97.teamstats.ClientRequest;
 
 /**
  * @version 0.1
@@ -17,6 +19,7 @@ public class PacketSender {
     }
 
     public void sendPacket(Packet pk) throws IOException {
+        System.out.println("Sending packet " + pk.getID() + " (" + ClientRequest.getRequest(pk.getID()) + ")");
         output.writeObject(pk);
         output.flush();
     }

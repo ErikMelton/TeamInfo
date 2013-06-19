@@ -68,6 +68,13 @@ public class PacketListener extends Thread {
         while (run) {
             try {
                 Object obj = inputStream.readObject();
+                if (obj instanceof Packet) {
+                    Packet pk = (Packet) obj;
+                    System.out.println("Reading packet " + pk.getID() + " (" + ClientRequest.getRequest(pk.getID()) + ")");
+                    queue.add(pk);
+                } else {
+                    System.out.println("Unknown data was retrieved: " + obj.toString());
+                }
             } catch (IOException ex) {
                 if (inputStream.isClosed()) {
                     Logger.getLogger(PacketListener.class.getName()).log(Level.SEVERE, "Stream is closed", ex);
