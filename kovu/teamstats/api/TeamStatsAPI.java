@@ -62,9 +62,9 @@ public final class TeamStatsAPI {
 
     static {
         //enter the server url here where the main bouncer is
-        MAIN_SERVER_URL = "";
+        MAIN_SERVER_URL = "teamstats.ae97.net";
         //enter the port the bouncer runs off of here
-        SERVER_PORT = 0;
+        SERVER_PORT = 19325;
     }
 
     public TeamStatsAPI(String aName, String aSession) throws ServerRejectionException, IOException, ClassNotFoundException {

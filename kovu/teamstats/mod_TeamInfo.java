@@ -48,7 +48,7 @@ public class mod_TeamInfo extends BaseMod {
         TeamStatsAPI temp;
         try {
             temp = new TeamStatsAPI(mc.session.username, mc.session.sessionId);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             temp = null;
             logger.log(Level.SEVERE, "An error has occured", ex);
         }
