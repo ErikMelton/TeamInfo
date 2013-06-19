@@ -609,11 +609,11 @@ public final class TeamStatsAPI {
                     }
 
                 } catch (IOException ex) {
-                    ex.printStackTrace(System.err);
+                    ex.printStackTrace(System.out);
                     online = false;
                 }
             } else {
-                new ServerConnectionLostException().printStackTrace(System.err);
+                new ServerConnectionLostException().printStackTrace(System.out);
                 online = false;
             }
         }
