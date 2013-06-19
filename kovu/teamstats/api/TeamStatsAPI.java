@@ -73,9 +73,11 @@ public final class TeamStatsAPI {
         connection = new Socket(MAIN_SERVER_URL, SERVER_PORT);
         PacketSender tempSender = new PacketSender(connection.getOutputStream());
         PacketListener tempListener = new PacketListener(connection.getInputStream());
+        tempListener.start();
         Packet getServer = new Packet(ClientRequest.GETSERVER);
         tempSender.sendPacket(getServer);
         Packet p = tempListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+        tempListener.interrupt();
         String SERVER_URL = null;
         Object o = p.getData("ip");
         if (o instanceof String) {
@@ -97,6 +99,7 @@ public final class TeamStatsAPI {
         connection = new Socket(link, port);
         packetListener = new PacketListener(connection.getInputStream());
         packetSender = new PacketSender(connection.getOutputStream());
+        packetListener.start();
         Packet pac = new Packet(ClientRequest.OPENCONNECTION);
         pac.addData("name", name).addData("session", session);
         packetSender.sendPacket(pac);
