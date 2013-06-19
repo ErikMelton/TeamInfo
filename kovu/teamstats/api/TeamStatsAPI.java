@@ -25,6 +25,7 @@ import net.ae97.teamstats.ClientRequest;
 import net.ae97.teamstats.networking.Packet;
 import net.ae97.teamstats.networking.PacketListener;
 import net.ae97.teamstats.networking.PacketSender;
+import net.minecraft.client.Minecraft;
 
 /**
  * The TeamStats API class. This handles all the server-related requests. This
@@ -409,6 +410,7 @@ public final class TeamStatsAPI {
         wasSetup();
         online = newStatus;
         Packet packet = new Packet(ClientRequest.CHANGEONLINE);
+        packet.addData("session", Minecraft.getMinecraft().session.sessionId);
         packet.addData("online", online);
         packetSender.sendPacket(packet);
         Packet reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
@@ -473,6 +475,7 @@ public final class TeamStatsAPI {
             if (online) {
                 try {
                     Packet packet = new Packet(ClientRequest.GETFRIENDS);
+                    packet.addData("session", Minecraft.getMinecraft().session.sessionId);
                     packetSender.sendPacket(packet);
                     String[] friends;
                     Packet reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
@@ -489,6 +492,7 @@ public final class TeamStatsAPI {
                     }
                     for (String name : addFriend) {
                         packet = new Packet(ClientRequest.ADDFRIEND);
+                        packet.addData("session", Minecraft.getMinecraft().session.sessionId);
                         packet.addData("name", name);
                         packetSender.sendPacket(packet);
                         reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
@@ -504,6 +508,7 @@ public final class TeamStatsAPI {
                     }
                     for (String name : removeFriend) {
                         packet = new Packet(ClientRequest.REMOVEFRIEND);
+                        packet.addData("session", Minecraft.getMinecraft().session.sessionId);
                         packet.addData("name", name);
                         packetSender.sendPacket(packet);
                         reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
@@ -519,6 +524,7 @@ public final class TeamStatsAPI {
                     }
                     pStats = pStats.trim();
                     packet = new Packet(ClientRequest.UPDATESTATS);
+                    packet.addData("session", Minecraft.getMinecraft().session.sessionId);
                     packet.addData("stats", pStats);
                     reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
                     if (!(Boolean) reply.getData("reply")) {
@@ -527,6 +533,7 @@ public final class TeamStatsAPI {
 
                     //check friend requests
                     packet = new Packet(ClientRequest.GETREQUESTS);
+                    packet.addData("session", Minecraft.getMinecraft().session.sessionId);
                     packetSender.sendPacket(packet);
                     reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
                     if (!(Boolean) reply.getData("reply")) {
@@ -545,6 +552,7 @@ public final class TeamStatsAPI {
                     }
 
                     packet = new Packet(ClientRequest.GETFRIENDS);
+                    packet.addData("session", Minecraft.getMinecraft().session.sessionId);
                     packetSender.sendPacket(packet);
                     reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
                     if (!(Boolean) reply.getData("reply")) {
@@ -571,6 +579,7 @@ public final class TeamStatsAPI {
                     onlineFriends.clear();
                     for (String friendName : friendList) {
                         Packet send = new Packet(ClientRequest.GETSTATS);
+                        send.addData("session", Minecraft.getMinecraft().session.sessionId);
                         send.addData("name", friendName);
                         packetSender.sendPacket(send);
                         reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
@@ -586,6 +595,7 @@ public final class TeamStatsAPI {
                         friendStats.put(friendName, friendS);
 
                         Packet send2 = new Packet(ClientRequest.GETONLINESTATUS);
+                        send2.addData("session", Minecraft.getMinecraft().session.sessionId);
                         send2.addData("name", friendName);
                         packetSender.sendPacket(send2);
                         reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
