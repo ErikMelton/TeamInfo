@@ -70,7 +70,7 @@ public class PacketListener extends Thread {
                 Object obj = inputStream.readObject();
                 if (obj instanceof Packet) {
                     Packet pk = (Packet) obj;
-                    System.out.println("Reading packet " + pk.getID() + " (" + ClientRequest.getRequest(pk.getID()) + ")");
+                    System.out.println("Reading packet " + pk.toString());
                     queue.add(pk);
                 } else {
                     System.out.println("Unknown data was retrieved: " + obj.toString());

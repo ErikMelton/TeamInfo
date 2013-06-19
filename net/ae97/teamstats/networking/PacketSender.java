@@ -19,7 +19,7 @@ public class PacketSender {
     }
 
     public void sendPacket(Packet pk) throws IOException {
-        System.out.println("Sending packet " + pk.getID() + " (" + ClientRequest.getRequest(pk.getID()) + ")");
+        System.out.println("Sending packet " + pk.toString());
         output.writeObject(pk);
         output.flush();
     }
