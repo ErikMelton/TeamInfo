@@ -26,7 +26,7 @@ public class PacketListener extends Thread {
         inputStream = new WatchableObjectInputStream(input);
     }
 
-    public Packet getNextPacket(byte idOfPacket, boolean isReply) {
+    public Packet getNextPacket(int idOfPacket, boolean isReply) {
         Iterator<Packet> itt;
         synchronized (queue) {
             Packet pk = queue.peek();
@@ -51,7 +51,7 @@ public class PacketListener extends Thread {
         return getNextPacket(idOfPacket, isReply);
     }
 
-    public Packet getNextPacket(byte idOfPacket) {
+    public Packet getNextPacket(int idOfPacket) {
         return getNextPacket(idOfPacket, false);
     }
 

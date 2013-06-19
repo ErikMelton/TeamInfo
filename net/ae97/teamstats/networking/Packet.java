@@ -11,11 +11,11 @@ import net.ae97.teamstats.ClientRequest;
  */
 public class Packet implements Serializable {
 
-    private final byte id;
+    private final int id;
     private final Map<String, Object> data = new HashMap<String, Object>();
     private boolean isAlive = true;
 
-    public Packet(byte i) {
+    public Packet(int i) {
         id = i;
     }
 
@@ -35,7 +35,7 @@ public class Packet implements Serializable {
         return data.get(key);
     }
 
-    public byte getID() {
+    public int getID() {
         return id;
     }
 

@@ -7,31 +7,31 @@ package net.ae97.teamstats;
  */
 public enum ClientRequest {
 
-    GETONLINESTATUS((byte) 0x10000000),
-    GETVERSION((byte) 0x01000000),
-    GETSERVER((byte) 0x00100000),
-    GETNODEMUMBER((byte) 0x00010000),
-    GETCLIENTCOUNT((byte) 0x00001000),
-    HAVEFREESPACE((byte) 0x00000100),
-    OPENCONNECTION((byte) 0x00000010),
-    GETFRIENDS((byte) 0x20000000),
-    UPDATESTATS((byte) 0x02000000),
-    ADDFRIEND((byte) 0x00200000),
-    REMOVEFRIEND((byte) 0x00020000),
-    GETSTATS((byte) 0x00002000),
-    GETREQUESTS((byte) 0x00000200),
-    CHANGEONLINE((byte) 0x00000020),
-    DISCONNECT((byte) 0xFFFFFFFF),
-    REQUESTACCEPTED((byte) 0xAAAAAAAA),
-    SIMPLEREPLYPACKET((byte) 0xBBBBBBBB),
-    NOSUCHREQUESTTYPE((byte) 0x00000000);
-    private final byte id;
+    GETONLINESTATUS(1),
+    GETVERSION(2),
+    GETSERVER(3),
+    GETNODEMUMBER(4),
+    GETCLIENTCOUNT(5),
+    HAVEFREESPACE(6),
+    OPENCONNECTION(10),
+    GETFRIENDS(11),
+    UPDATESTATS(12),
+    ADDFRIEND(13),
+    REMOVEFRIEND(14),
+    GETSTATS(15),
+    GETREQUESTS(16),
+    CHANGEONLINE(17),
+    DISCONNECT(97),
+    REQUESTACCEPTED(98),
+    SIMPLEREPLYPACKET(99),
+    NOSUCHREQUESTTYPE(0);
+    private final int id;
 
-    private ClientRequest(byte type) {
+    private ClientRequest(int type) {
         id = type;
     }
 
-    public byte getID() {
+    public int getID() {
         return id;
     }
 
@@ -46,13 +46,13 @@ public enum ClientRequest {
 
     public static ClientRequest getRequest(Byte r) {
         if (r == null) {
-            return getRequest((byte) 0x00000000);
+            return getRequest(0);
         } else {
             return getRequest(r.byteValue());
         }
     }
 
-    public static ClientRequest getRequest(byte r) {
+    public static ClientRequest getRequest(int r) {
         for (ClientRequest rq : ClientRequest.values()) {
             if (rq.id == r) {
                 return rq;
