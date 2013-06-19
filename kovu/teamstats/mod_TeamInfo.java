@@ -55,7 +55,10 @@ public class mod_TeamInfo extends BaseMod {
             temp = null;
             System.out.println("We had an error on the API");
             System.out.println(ex.getMessage());
-            System.out.println(ex.getStackTrace());
+            StackTraceElement[] el = ex.getStackTrace();
+            for (StackTraceElement e : el) {
+                System.out.println(e.toString());
+            }
         }
         api = temp;
         TeamStatsAPI.setAPI(api);
