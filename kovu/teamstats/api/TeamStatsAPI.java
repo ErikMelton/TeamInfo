@@ -482,7 +482,12 @@ public final class TeamStatsAPI {
                     if (!(Boolean) reply.getData("reply")) {
                         throw new ServerRejectionException((String) reply.getData("reason"));
                     }
-                    friends = ((String) packet.getData("names")).split(" ");
+                    String namesList = (String) packet.getData("names");
+                    if (namesList != null) {
+                        friends = namesList.split(" ");
+                    } else {
+                        friends = new String[0];
+                    }
 
                     //check current friend list, removing and adding name differences
                     List<String> addFriend = new TSAList<String>();
@@ -542,7 +547,9 @@ public final class TeamStatsAPI {
                     String names = (String) reply.getData("names");
                     String[] old = friendRequests.toArray(new String[0]);
                     friendRequests.clear();
-                    friendRequests.addAll(Arrays.asList(names.split(" ")));
+                    if (names != null) {
+                        friendRequests.addAll(Arrays.asList(names.split(" ")));
+                    }
                     if (newRequests.containsAll(Arrays.asList(old))) {
                     }
                     for (String name : old) {
