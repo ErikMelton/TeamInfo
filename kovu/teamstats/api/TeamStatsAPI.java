@@ -565,7 +565,14 @@ public final class TeamStatsAPI {
                     if (!(Boolean) reply.getData("reply")) {
                         throw new ServerRejectionException();
                     }
-                    List<String> updateFriends = Arrays.asList(((String) reply.getData("names")).split(" "));
+                    String aNameList = (String) reply.getData("names");
+                    List<String> updateFriends = new ArrayList<String>();
+                    if (aNameList != null) {
+                        updateFriends = Arrays.asList(aNameList.split(" "));
+                        if (updateFriends == null) {
+                            updateFriends = new ArrayList<String>();
+                        }
+                    }
                     for (String name : updateFriends) {
                         if (friendList.contains(name)) {
                             continue;
