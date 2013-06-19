@@ -11,7 +11,7 @@ import net.ae97.teamstats.ClientRequest;
  */
 public class Packet implements Serializable {
 
-    private final int id;
+    private int id = -1;
     private final Map<String, Object> data = new HashMap<String, Object>();
     private boolean isAlive = true;
 
