@@ -477,7 +477,7 @@ public final class TeamStatsAPI {
                     String[] friends;
                     Packet reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
                     if (!(Boolean) reply.getData("reply")) {
-                        throw new ServerRejectionException();
+                        throw new ServerRejectionException((String) reply.getData("reason"));
                     }
                     friends = ((String) packet.getData("names")).split(" ");
 
