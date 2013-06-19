@@ -44,6 +44,10 @@ public class PacketListener extends Thread {
             }
         }
         //add a delay to the packet check
+        DelayThread thread = new DelayThread();
+        thread.start();
+        while (thread.isAlive()) {
+        };
         return getNextPacket(idOfPacket, isReply);
     }
 
@@ -73,6 +77,19 @@ public class PacketListener extends Thread {
                 }
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(PacketListener.class.getName()).log(Level.SEVERE, "Class read was incorrect", ex);
+            }
+        }
+    }
+
+    private class DelayThread extends Thread {
+
+        public void run() {
+            synchronized (DelayThread.this) {
+                try {
+                    DelayThread.this.wait(1 * 1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(PacketListener.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
