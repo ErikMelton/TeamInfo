@@ -608,9 +608,15 @@ public final class TeamStatsAPI {
                         }
                     }
 
-                } catch (IOException ex) {
-                    ex.printStackTrace(System.out);
-                    online = false;
+                } catch (Exception ex) {
+                    synchronized (System.out) {
+                        System.out.println(ex.getMessage());
+                        StackTraceElement[] el = ex.getStackTrace();
+                        for (StackTraceElement e : el) {
+                            System.out.println(e.toString());
+                        }
+                        online = false;
+                    }
                 }
             } else {
                 new ServerConnectionLostException().printStackTrace(System.out);
