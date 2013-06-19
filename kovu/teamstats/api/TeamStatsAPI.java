@@ -39,7 +39,7 @@ public final class TeamStatsAPI {
     private static TeamStatsAPI api;
     private static final String MAIN_SERVER_URL;
     private static final int SERVER_PORT;
-    private String name;
+    private final String name;
     private String session;
     private Socket connection;
     private final PacketListener packetListener;
@@ -55,7 +55,7 @@ public final class TeamStatsAPI {
     private final List<String> onlineFriends = new TSAList<String>();
     private final int UPDATE_TIMER = 60; //time this means is set when sent to executor service
     private boolean online = false;
-    private short API_VERSION = 2;
+    private static final short API_VERSION = 3;
     private boolean was_set_up = false;
     private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
     private final ScheduledFuture task;
