@@ -35,6 +35,7 @@ public class GuiAddtoTeam extends GuiScreen {
             String s = serverTextField.getText();
             try {
                 TeamStatsAPI.getAPI().addFriend(s);
+                TeamStatsAPI.getAPI().forceUpdate();
             } catch (Exception e) {
                 e.printStackTrace();
             }
