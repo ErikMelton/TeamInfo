@@ -1,5 +1,6 @@
 package kovu.teamstats.gui;
 
+import kovu.teamstats.mod_TeamInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IGuiHandler;

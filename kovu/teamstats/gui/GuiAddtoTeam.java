@@ -72,6 +72,7 @@ public class GuiAddtoTeam extends GuiScreen {
         serverTextField.updateCursorCounter();
     }
 
+
     public void drawScreen(int i, int j, float f) {
         drawRect(width / 2 - 120, height / 2 - 50, width / 2 + 120, height / 2 + 30, 0x60000000);
         drawCenteredString(fontRenderer, "Add Player", width / 2, height / 2 - 43, 0xffffff);

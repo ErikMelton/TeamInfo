@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import kovu.teamstats.ClientTickHandler;
 import kovu.teamstats.Kovu;
 import kovu.teamstats.mod_TeamInfo;
 
@@ -68,10 +69,14 @@ public class GuiTeamInfoIngame extends GuiScreen {
 		if(Kovu.isVersion)
 		{
 			fontRenderer.drawStringWithShadow("TeamStats Dev 0.4.0", 2, 2, 0x00ff00);
+			if(ClientTickHandler.selectedFriend != null)
+			{
+				GuiAddReject addReject = new GuiAddReject(this, ClientTickHandler.selectedFriend);
+				addReject.drawScreen(i, j, f);
+			}
 		}
 		this.font = fontRenderer;
 		super.drawScreen(i, j, f);
-//		GuiUtils.drawBorderedRect(100, 100, 500, 300, 0, 0, 0, 125, (float) 1.4, 0, 0, 0, 255);
 	}
 	
 	public static void drawMain()

@@ -12,12 +12,10 @@ public class GuiAddReject extends GuiScreen {
     private GuiScreen parentScreen;
     private GuiTextField serverTextField;
     private String playername;
-    private String fullMessage;
 
-    public GuiAddReject(GuiScreen guiscreen, String s, String s1) {
+    public GuiAddReject(GuiScreen guiscreen, String s) {
         parentScreen = guiscreen;
         playername = s;
-        fullMessage = s1;
     }
 
     public void updateScreen() {
@@ -39,14 +37,15 @@ public class GuiAddReject extends GuiScreen {
         if (guibutton.id == 0) {
             try {
                 TeamStatsAPI.getAPI().addFriend(playername);
+                mc.thePlayer.addChatMessage("Accepted " + playername + " as a friend");
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //TeamInfo.interpretUpdate(fullMessage);
             mc.displayGuiScreen(parentScreen);
         }
         if (guibutton.id == 1) {
-            //FriendModAPI.rejectadd(playername);
+          //TODO: ADD .rejectAdd to API  TeamStatsAPI.getAPI().rejectadd(playername);
+            mc.thePlayer.addChatMessage("Rejected " + playername + " as a friend");
             mc.displayGuiScreen(parentScreen);
         }
     }
