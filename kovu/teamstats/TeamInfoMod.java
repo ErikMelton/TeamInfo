@@ -11,14 +11,13 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid = "TeamInfo", name = "Team Info", version = "1.0")
+@Mod(modid = "TeamInfo", name = "TeamInfo", version = "1.0.0")
 public class TeamInfoMod {
 
-    @SidedProxy(clientSide = "kovu.teamstats.ClientProxy", serverSide = "kovu.stats.CommonProxy")
+    @SidedProxy(clientSide = "kovu.teamstats.ClientProxy", serverSide = "kovu.teamstats.CommonProxy")
     public static CommonProxy proxy;
-    @Instance
-    public static TeamInfoMod instance;
 
+    public static TeamInfoMod instance;
     @Init
     public void load(FMLInitializationEvent evt) {
         proxy.registerRenderInformation();

@@ -74,13 +74,15 @@ public class ClientTickHandler implements ITickHandler {
     		ticksPassed = 0;
     		try
     		{
-    			if(TeamStatsAPI.getAPI().getFriendRequests().length != 0)
+				String[] temp = TeamStatsAPI.getAPI().getNewFriendRequests(true);
+
+    			for(String name : temp)
     			{
+    				//TODO: DE BJOIEHOUAHEG THIS CODE
     				System.out.println("Inside of Friend request loop");
-    				String[] temp = TeamStatsAPI.getAPI().getFriendRequests();
-    				List<String> ftemp = Arrays.asList(temp);
-    				selectedFriend = ftemp.get(0);
-    				System.out.println(selectedFriend);
+//  				List<String> ftemp = Arrays.asList(temp);
+//    				selectedFriend = ftemp.get(0);
+    				System.out.println(name);
     			}
     		}
     		catch(Exception e)
