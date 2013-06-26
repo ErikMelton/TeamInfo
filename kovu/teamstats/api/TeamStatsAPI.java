@@ -57,7 +57,7 @@ public final class TeamStatsAPI {
     private final List<String> rejectedRequests = new TSAList<String>();
     private final int UPDATE_TIMER = 60; //time this means is set when sent to executor service
     private boolean online = false;
-    private static final short API_VERSION = 3;
+    private static final short API_VERSION = 4;
     private boolean was_set_up = false;
     private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
     private final ScheduledFuture task;
@@ -213,7 +213,7 @@ public final class TeamStatsAPI {
      * @throws IOException Thrown when server fails to send data or if server
      * rejects communication
      */
-    public boolean updateStats(Map<String, ? extends Object> map) throws IOException {
+    public boolean updateStats(Map<String, Object> map) throws IOException {
         for (String key : map.keySet()) {
             updateStats(key, map.get(key));
         }
@@ -540,15 +540,9 @@ public final class TeamStatsAPI {
                         }
                     }
 
-                    //send new stats for this person
-                    String pStats = "";
-                    for (String key : stats.keySet()) {
-                        pStats += key + ":" + stats.get(key) + " ";
-                    }
-                    pStats = pStats.trim();
                     packet = new Packet(ClientRequest.UPDATESTATS);
                     packet.addData("session", Minecraft.getMinecraft().session.sessionId);
-                    packet.addData("stats", pStats);
+                    packet.addData("stats", stats);
                     reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
                     if (!(Boolean) reply.getData("reply")) {
                         throw new ServerRejectionException();
