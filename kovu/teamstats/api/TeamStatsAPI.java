@@ -54,6 +54,7 @@ public final class TeamStatsAPI {
     private final List<String> newRequests = new TSAList<String>();
     private final List<String> newlyRemovedFriends = new TSAList<String>();
     private final List<String> onlineFriends = new TSAList<String>();
+    private final List<String> rejectedRequests = new TSAList<String>();
     private final int UPDATE_TIMER = 60; //time this means is set when sent to executor service
     private boolean online = false;
     private static final short API_VERSION = 3;
@@ -276,6 +277,23 @@ public final class TeamStatsAPI {
             newRequests.clear();
         }
         return newFriendsToReturn;
+    }
+
+    /**
+     * Gets the list of new rejected names to this user. This will also clear
+     * the list if true is passed.
+     *
+     * @param reset Whether to clear the list. True will remove the list after
+     * returning it.
+     * @return Names of new rejected requests
+     */
+    public String[] getNewRejectedRequests(boolean reset) throws IOException {
+        wasSetup();
+        String[] rejectedRequestsToReturn = rejectedRequests.toArray(new String[0]);
+        if (reset) {
+            rejectedRequests.clear();
+        }
+        return rejectedRequestsToReturn;
     }
 
     /**
@@ -534,6 +552,28 @@ public final class TeamStatsAPI {
                     reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
                     if (!(Boolean) reply.getData("reply")) {
                         throw new ServerRejectionException();
+                    }
+
+                    packet = new Packet(ClientRequest.REJECTREQUEST);
+                    packet.addData("session", Minecraft.getMinecraft().session.sessionId);
+                    packet.addData("names", null);
+                    packetSender.sendPacket(packet);
+                    reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                    if (!(Boolean) reply.getData("reply")) {
+                        throw new ServerRejectionException();
+                    }
+
+                    packet = new Packet(ClientRequest.REJECTEDREQUESTS);
+                    packet.addData("session", Minecraft.getMinecraft().session.sessionId);
+                    packetSender.sendPacket(packet);
+                    reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                    if (!(Boolean) reply.getData("reply")) {
+                        throw new ServerRejectionException();
+                    }
+                    String rejectedNames = (String) reply.getData("names");
+                    if (rejectedNames != null) {
+                        rejectedRequests.clear();
+                        rejectedRequests.addAll(Arrays.asList(rejectedNames));
                     }
 
                     //check friend requests
