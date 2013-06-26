@@ -71,7 +71,8 @@ public class ClientTickHandler implements ITickHandler {
     	try
     	{
 			String[] temp = TeamStatsAPI.getAPI().getNewFriendRequests(true);
-
+			System.out.println(temp[0]);
+			
 			for(String name : temp)
     		{
     			//TODO: DE BJOIEHOUAHEG THIS CODE
