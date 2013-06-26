@@ -68,28 +68,23 @@ public class ClientTickHandler implements ITickHandler {
     		GuiTeamInfoIngame.drawMain();
     	}
     	
-    	if(ticksPassed == 200)
+    	try
     	{
-    		System.out.println(ticksPassed + " ticks passed");
-    		ticksPassed = 0;
-    		try
-    		{
-				String[] temp = TeamStatsAPI.getAPI().getNewFriendRequests(true);
+			String[] temp = TeamStatsAPI.getAPI().getNewFriendRequests(true);
 
-    			for(String name : temp)
-    			{
-    				//TODO: DE BJOIEHOUAHEG THIS CODE
-    				System.out.println("Inside of Friend request loop");
-//  				List<String> ftemp = Arrays.asList(temp);
-//    				selectedFriend = ftemp.get(0);
-    				System.out.println(name);
-    			}
-    		}
-    		catch(Exception e)
+			for(String name : temp)
     		{
-    			e.printStackTrace();
-    			System.out.println("Client failed to get friend requests");
+    			//TODO: DE BJOIEHOUAHEG THIS CODE
+    			System.out.println("Inside of Friend request loop");
+//  			List<String> ftemp = Arrays.asList(temp);
+//    			selectedFriend = ftemp.get(0);
+    			System.out.println(name);
     		}
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    		System.out.println("Client failed to get friend requests");
     	}
     }
 }
