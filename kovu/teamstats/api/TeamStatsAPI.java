@@ -585,13 +585,11 @@ public final class TeamStatsAPI {
                         throw new ServerRejectionException();
                     }
                     String names = (String) reply.getData("names");
-                    String[] old = friendRequests.toArray(new String[0]);
                     friendRequests.clear();
                     if (names != null) {
                         friendRequests.addAll(Arrays.asList(names.split(" ")));
                     }
-                    if (newRequests.containsAll(Arrays.asList(old))) {
-                    }
+                    String[] old = friendRequests.toArray(new String[0]);
                     for (String name : old) {
                         if (!newRequests.contains(name)) {
                             newRequests.add(name);
