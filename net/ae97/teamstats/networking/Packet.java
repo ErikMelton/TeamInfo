@@ -53,6 +53,8 @@ public class Packet implements Serializable {
                 .append(super.toString())
                 .append(", id=")
                 .append(this.getID())
+                .append(", id-name=")
+                .append(ClientRequest.getRequest(this.getID()))
                 .append(", data=")
                 .append(data);
         return builder.toString();
