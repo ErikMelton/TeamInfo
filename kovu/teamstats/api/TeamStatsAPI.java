@@ -579,16 +579,24 @@ public final class TeamStatsAPI {
                         throw new ServerRejectionException();
                     }
                     String names = (String) reply.getData("names");
+                    String[] old = friendRequests.toArray(new String[friendRequests.size()]);
                     friendRequests.clear();
                     if (names != null) {
                         friendRequests.addAll(Arrays.asList(names.split(" ")));
                     }
-                    String[] old = friendRequests.toArray(new String[0]);
-                    for (String name : old) {
-                        if (!newRequests.contains(name)) {
-                            newRequests.add(name);
+                    for (String newName : friendRequests) {
+                        boolean name_new = true;
+                        for (String name : old) {
+                            if (name.equalsIgnoreCase(newName)) {
+                                name_new = false;
+                                break;
+                            }
+                        }
+                        if (name_new) {
+                            newRequests.add(newName);
                         }
                     }
+                    //newRequests
 
                     packet = new Packet(ClientRequest.GETFRIENDS);
                     packet.addData("session", Minecraft.getMinecraft().session.sessionId);
