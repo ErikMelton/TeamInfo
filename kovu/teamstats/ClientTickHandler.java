@@ -71,7 +71,10 @@ public class ClientTickHandler implements ITickHandler {
     	try
     	{
 			String[] temp = TeamStatsAPI.getAPI().getNewFriendRequests(true);
+			
+			if(temp.length != 0)
 			System.out.println(temp[0]);
+			//temp's length is always 0 for some reason
 			
 			for(String name : temp)
     		{
