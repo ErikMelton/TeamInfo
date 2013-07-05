@@ -61,6 +61,7 @@ public final class TeamStatsAPI {
     private boolean was_set_up = false;
     private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
     private final ScheduledFuture task;
+    private long lastUpdate = 0;
 
     static {
         //enter the server url here where the main bouncer is
@@ -126,20 +127,8 @@ public final class TeamStatsAPI {
      */
     public Map<String, Map<String, Object>> getFriendStats() throws IOException {
         wasSetup();
+        forceUpdate();
         return friendStats;
-    }
-
-    /**
-     * Returns the map's toString form of the friend's stats. THIS IS
-     * DEPRECATED, REFER TO NOTES FOR NEW METHOD
-     *
-     * @param friendName Name of friend
-     * @return String version of the stats
-     * @throws IOException
-     */
-    public String getFriendState(String friendName) throws IOException {
-        wasSetup();
-        return friendStats.get(friendName).toString();
     }
 
     /**
@@ -151,8 +140,9 @@ public final class TeamStatsAPI {
      * @throws IOException Thrown when server fails to send data or if server
      * rejects communication
      */
-    public Map<String, Object> getFriendStat(String friendName) throws IOException {
+    public Map<String, Object> getFriendStats(String friendName) throws IOException {
         wasSetup();
+        forceUpdate();
         return friendStats.get(friendName);
     }
 
@@ -165,8 +155,9 @@ public final class TeamStatsAPI {
      * @return Value of the friend's key, or null if not one
      * @throws IOException
      */
-    public Object getFriendStat(String friendName, String key) throws IOException {
+    public Object getFriendStats(String friendName, String key) throws IOException {
         wasSetup();
+        forceUpdate();
         key = key.toLowerCase();
         Map<String, Object> stat = friendStats.get(friendName);
         if (stat == null) {
@@ -185,6 +176,7 @@ public final class TeamStatsAPI {
      */
     public String[] getFriends() throws IOException {
         wasSetup();
+        forceUpdate();
         return friendList.toArray(new String[0]);
     }
 
@@ -217,6 +209,7 @@ public final class TeamStatsAPI {
         for (String key : map.keySet()) {
             updateStats(key, map.get(key));
         }
+        forceUpdate();
         return true;
     }
 
@@ -230,6 +223,7 @@ public final class TeamStatsAPI {
      */
     public String[] getFriendRequests() throws IOException {
         wasSetup();
+        forceUpdate();
         return friendRequests.toArray(new String[0]);
     }
 
@@ -245,6 +239,7 @@ public final class TeamStatsAPI {
      */
     public boolean addFriend(String name) throws IOException {
         wasSetup();
+        forceUpdate();
         return friendList.add(name);
     }
 
@@ -259,6 +254,7 @@ public final class TeamStatsAPI {
      */
     public boolean removeFriend(String name) throws IOException {
         wasSetup();
+        forceUpdate();
         return friendList.remove(name);
     }
 
@@ -272,6 +268,7 @@ public final class TeamStatsAPI {
      */
     public String[] getNewFriendRequests(boolean reset) throws IOException {
         wasSetup();
+        forceUpdate();
         String[] newFriendsToReturn = newRequests.toArray(new String[0]);
         if (reset) {
             newRequests.clear();
@@ -289,6 +286,7 @@ public final class TeamStatsAPI {
      */
     public String[] getNewRejectedRequests(boolean reset) throws IOException {
         wasSetup();
+        forceUpdate();
         String[] rejectedRequestsToReturn = rejectedRequests.toArray(new String[0]);
         if (reset) {
             rejectedRequests.clear();
@@ -306,6 +304,7 @@ public final class TeamStatsAPI {
      */
     public String[] getRemovedFriends(boolean reset) throws IOException {
         wasSetup();
+        forceUpdate();
         String[] newFriendsToReturn = newlyRemovedFriends.toArray(new String[0]);
         if (reset) {
             newlyRemovedFriends.clear();
@@ -323,6 +322,7 @@ public final class TeamStatsAPI {
      */
     public String[] getNewFriends(boolean reset) throws IOException {
         wasSetup();
+        forceUpdate();
         String[] newFriendsToReturn = newFriends.toArray(new String[0]);
         if (reset) {
             newFriends.clear();
@@ -338,6 +338,7 @@ public final class TeamStatsAPI {
      */
     public String[] getNewFriendRequests() throws IOException {
         wasSetup();
+        forceUpdate();
         return getNewFriendRequests(true);
     }
 
@@ -349,6 +350,7 @@ public final class TeamStatsAPI {
      */
     public String[] getRemovedFriends() throws IOException {
         wasSetup();
+        forceUpdate();
         return getRemovedFriends(true);
     }
 
@@ -359,6 +361,7 @@ public final class TeamStatsAPI {
      */
     public String[] getNewFriends() throws IOException {
         wasSetup();
+        forceUpdate();
         return getNewFriends(true);
     }
 
@@ -369,6 +372,7 @@ public final class TeamStatsAPI {
      */
     public String[] getOnlineFriends() throws IOException {
         wasSetup();
+        forceUpdate();
         return onlineFriends.toArray(new String[0]);
     }
 
@@ -380,6 +384,7 @@ public final class TeamStatsAPI {
      */
     public boolean isFriendOnline(String name) throws IOException {
         wasSetup();
+        forceUpdate();
         return onlineFriends.contains(name);
     }
 
@@ -492,176 +497,178 @@ public final class TeamStatsAPI {
         public void run() {
             if (online) {
                 try {
-                    Packet packet = new Packet(ClientRequest.GETFRIENDS);
-                    packet.addData("session", Minecraft.getMinecraft().session.sessionId);
-                    packetSender.sendPacket(packet);
-                    String[] friends;
-                    Packet reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
-                    if (!(Boolean) reply.getData("reply")) {
-                        throw new ServerRejectionException((String) reply.getData("reason"));
-                    }
-                    String namesList = (String) packet.getData("names");
-                    if (namesList != null) {
-                        friends = namesList.split(" ");
-                    } else {
-                        friends = new String[0];
-                    }
-
-                    //check current friend list, removing and adding name differences
-                    List<String> addFriend = new TSAList<String>();
-                    addFriend.addAll(friendList);
-                    for (String existing : friends) {
-                        addFriend.remove(existing);
-                    }
-                    for (String name : addFriend) {
-                        packet = new Packet(ClientRequest.ADDFRIEND);
+                    if (lastUpdate + (1000 * 10) < System.currentTimeMillis()) {
+                        Packet packet = new Packet(ClientRequest.GETFRIENDS);
                         packet.addData("session", Minecraft.getMinecraft().session.sessionId);
-                        packet.addData("name", name);
                         packetSender.sendPacket(packet);
-                        reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                        String[] friends;
+                        Packet reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
                         if (!(Boolean) reply.getData("reply")) {
-                            throw new ServerRejectionException();
+                            throw new ServerRejectionException((String) reply.getData("reason"));
                         }
-                    }
-
-                    List<String> removeFriend = new ArrayList<String>();
-                    removeFriend.addAll(Arrays.asList(friends));
-                    for (String existing : friendList) {
-                        removeFriend.remove(existing);
-                    }
-                    for (String name : removeFriend) {
-                        packet = new Packet(ClientRequest.REMOVEFRIEND);
-                        packet.addData("session", Minecraft.getMinecraft().session.sessionId);
-                        packet.addData("name", name);
-                        packetSender.sendPacket(packet);
-                        reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
-                        if (!(Boolean) reply.getData("reply")) {
-                            throw new ServerRejectionException();
+                        String namesList = (String) packet.getData("names");
+                        if (namesList != null) {
+                            friends = namesList.split(" ");
+                        } else {
+                            friends = new String[0];
                         }
-                    }
 
-                    packet = new Packet(ClientRequest.UPDATESTATS);
-                    packet.addData("session", Minecraft.getMinecraft().session.sessionId);
-                    packet.addData("stats", stats);
-                    reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
-                    if (!(Boolean) reply.getData("reply")) {
-                        throw new ServerRejectionException();
-                    }
-
-                    packet = new Packet(ClientRequest.REJECTREQUEST);
-                    packet.addData("session", Minecraft.getMinecraft().session.sessionId);
-                    packet.addData("names", null);
-                    packetSender.sendPacket(packet);
-                    reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
-                    if (!(Boolean) reply.getData("reply")) {
-                        throw new ServerRejectionException();
-                    }
-
-                    packet = new Packet(ClientRequest.REJECTEDREQUESTS);
-                    packet.addData("session", Minecraft.getMinecraft().session.sessionId);
-                    packetSender.sendPacket(packet);
-                    reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
-                    if (!(Boolean) reply.getData("reply")) {
-                        throw new ServerRejectionException();
-                    }
-                    String rejectedNames = (String) reply.getData("names");
-                    if (rejectedNames != null) {
-                        rejectedRequests.clear();
-                        rejectedRequests.addAll(Arrays.asList(rejectedNames));
-                    }
-
-                    //check friend requests
-                    packet = new Packet(ClientRequest.GETREQUESTS);
-                    packet.addData("session", Minecraft.getMinecraft().session.sessionId);
-                    packetSender.sendPacket(packet);
-                    reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
-                    if (!(Boolean) reply.getData("reply")) {
-                        throw new ServerRejectionException();
-                    }
-                    String names = (String) reply.getData("names");
-                    String[] old = friendRequests.toArray(new String[friendRequests.size()]);
-                    friendRequests.clear();
-                    if (names != null) {
-                        friendRequests.addAll(Arrays.asList(names.split(" ")));
-                    }
-                    for (String newName : friendRequests) {
-                        boolean name_new = true;
-                        for (String name : old) {
-                            if (name.equalsIgnoreCase(newName)) {
-                                name_new = false;
-                                break;
+                        //check current friend list, removing and adding name differences
+                        List<String> addFriend = new TSAList<String>();
+                        addFriend.addAll(friendList);
+                        for (String existing : friends) {
+                            addFriend.remove(existing);
+                        }
+                        for (String name : addFriend) {
+                            packet = new Packet(ClientRequest.ADDFRIEND);
+                            packet.addData("session", Minecraft.getMinecraft().session.sessionId);
+                            packet.addData("name", name);
+                            packetSender.sendPacket(packet);
+                            reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                            if (!(Boolean) reply.getData("reply")) {
+                                throw new ServerRejectionException();
                             }
                         }
-                        if (name_new) {
-                            newRequests.add(newName);
-                        }
-                    }
-                    //newRequests
 
-                    packet = new Packet(ClientRequest.GETFRIENDS);
-                    packet.addData("session", Minecraft.getMinecraft().session.sessionId);
-                    packetSender.sendPacket(packet);
-                    reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
-                    if (!(Boolean) reply.getData("reply")) {
-                        throw new ServerRejectionException();
-                    }
-                    String aNameList = (String) reply.getData("names");
-                    List<String> updateFriends = new ArrayList<String>();
-                    if (aNameList != null) {
-                        updateFriends = Arrays.asList(aNameList.split(" "));
-                        if (updateFriends == null) {
-                            updateFriends = new ArrayList<String>();
+                        List<String> removeFriend = new ArrayList<String>();
+                        removeFriend.addAll(Arrays.asList(friends));
+                        for (String existing : friendList) {
+                            removeFriend.remove(existing);
                         }
-                    }
-                    for (String name : updateFriends) {
-                        if (friendList.contains(name)) {
-                            continue;
+                        for (String name : removeFriend) {
+                            packet = new Packet(ClientRequest.REMOVEFRIEND);
+                            packet.addData("session", Minecraft.getMinecraft().session.sessionId);
+                            packet.addData("name", name);
+                            packetSender.sendPacket(packet);
+                            reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                            if (!(Boolean) reply.getData("reply")) {
+                                throw new ServerRejectionException();
+                            }
                         }
-                        newFriends.add(name);
-                    }
-                    for (String name : friendList) {
-                        if (updateFriends.contains(name)) {
-                            continue;
-                        }
-                        newlyRemovedFriends.add(name);
-                    }
-                    friendList.clear();
-                    friendList.addAll(updateFriends);
 
-                    //get stats for friends in list
-                    friendStats.clear();
-                    onlineFriends.clear();
-                    for (String friendName : friendList) {
-                        Packet send = new Packet(ClientRequest.GETSTATS);
-                        send.addData("session", Minecraft.getMinecraft().session.sessionId);
-                        send.addData("name", friendName);
-                        packetSender.sendPacket(send);
+                        packet = new Packet(ClientRequest.UPDATESTATS);
+                        packet.addData("session", Minecraft.getMinecraft().session.sessionId);
+                        packet.addData("stats", stats);
                         reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
                         if (!(Boolean) reply.getData("reply")) {
                             throw new ServerRejectionException();
                         }
-                        String stat = (String) reply.getData("stats");
-                        Map<String, Object> friendS = new HashMap<String, Object>();
-                        String[] parts = stat.split(" ");
-                        for (String string : parts) {
-                            friendS.put(string.split(":")[0].toLowerCase().trim(), string.split(":")[1]);
-                        }
-                        friendStats.put(friendName, friendS);
 
-                        Packet send2 = new Packet(ClientRequest.GETONLINESTATUS);
-                        send2.addData("session", Minecraft.getMinecraft().session.sessionId);
-                        send2.addData("name", friendName);
-                        packetSender.sendPacket(send2);
+                        packet = new Packet(ClientRequest.REJECTREQUEST);
+                        packet.addData("session", Minecraft.getMinecraft().session.sessionId);
+                        packet.addData("names", null);
+                        packetSender.sendPacket(packet);
                         reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
                         if (!(Boolean) reply.getData("reply")) {
                             throw new ServerRejectionException();
                         }
-                        boolean isOnline = (Boolean) reply.getData("online");
-                        if (isOnline) {
-                            onlineFriends.add(friendName);
-                        }
-                    }
 
+                        packet = new Packet(ClientRequest.REJECTEDREQUESTS);
+                        packet.addData("session", Minecraft.getMinecraft().session.sessionId);
+                        packetSender.sendPacket(packet);
+                        reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                        if (!(Boolean) reply.getData("reply")) {
+                            throw new ServerRejectionException();
+                        }
+                        String rejectedNames = (String) reply.getData("names");
+                        if (rejectedNames != null) {
+                            rejectedRequests.clear();
+                            rejectedRequests.addAll(Arrays.asList(rejectedNames));
+                        }
+
+                        //check friend requests
+                        packet = new Packet(ClientRequest.GETREQUESTS);
+                        packet.addData("session", Minecraft.getMinecraft().session.sessionId);
+                        packetSender.sendPacket(packet);
+                        reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                        if (!(Boolean) reply.getData("reply")) {
+                            throw new ServerRejectionException();
+                        }
+                        String names = (String) reply.getData("names");
+                        String[] old = friendRequests.toArray(new String[friendRequests.size()]);
+                        friendRequests.clear();
+                        if (names != null) {
+                            friendRequests.addAll(Arrays.asList(names.split(" ")));
+                        }
+                        for (String newName : friendRequests) {
+                            boolean name_new = true;
+                            for (String name : old) {
+                                if (name.equalsIgnoreCase(newName)) {
+                                    name_new = false;
+                                    break;
+                                }
+                            }
+                            if (name_new) {
+                                newRequests.add(newName);
+                            }
+                        }
+                        //newRequests
+
+                        packet = new Packet(ClientRequest.GETFRIENDS);
+                        packet.addData("session", Minecraft.getMinecraft().session.sessionId);
+                        packetSender.sendPacket(packet);
+                        reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                        if (!(Boolean) reply.getData("reply")) {
+                            throw new ServerRejectionException();
+                        }
+                        String aNameList = (String) reply.getData("names");
+                        List<String> updateFriends = new ArrayList<String>();
+                        if (aNameList != null) {
+                            updateFriends = Arrays.asList(aNameList.split(" "));
+                            if (updateFriends == null) {
+                                updateFriends = new ArrayList<String>();
+                            }
+                        }
+                        for (String name : updateFriends) {
+                            if (friendList.contains(name)) {
+                                continue;
+                            }
+                            newFriends.add(name);
+                        }
+                        for (String name : friendList) {
+                            if (updateFriends.contains(name)) {
+                                continue;
+                            }
+                            newlyRemovedFriends.add(name);
+                        }
+                        friendList.clear();
+                        friendList.addAll(updateFriends);
+
+                        //get stats for friends in list
+                        friendStats.clear();
+                        onlineFriends.clear();
+                        for (String friendName : friendList) {
+                            Packet send = new Packet(ClientRequest.GETSTATS);
+                            send.addData("session", Minecraft.getMinecraft().session.sessionId);
+                            send.addData("name", friendName);
+                            packetSender.sendPacket(send);
+                            reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                            if (!(Boolean) reply.getData("reply")) {
+                                throw new ServerRejectionException();
+                            }
+                            String stat = (String) reply.getData("stats");
+                            Map<String, Object> friendS = new HashMap<String, Object>();
+                            String[] parts = stat.split(" ");
+                            for (String string : parts) {
+                                friendS.put(string.split(":")[0].toLowerCase().trim(), string.split(":")[1]);
+                            }
+                            friendStats.put(friendName, friendS);
+
+                            Packet send2 = new Packet(ClientRequest.GETONLINESTATUS);
+                            send2.addData("session", Minecraft.getMinecraft().session.sessionId);
+                            send2.addData("name", friendName);
+                            packetSender.sendPacket(send2);
+                            reply = packetListener.getNextPacket(ClientRequest.SIMPLEREPLYPACKET);
+                            if (!(Boolean) reply.getData("reply")) {
+                                throw new ServerRejectionException();
+                            }
+                            boolean isOnline = (Boolean) reply.getData("online");
+                            if (isOnline) {
+                                onlineFriends.add(friendName);
+                            }
+                        }
+                        lastUpdate = System.currentTimeMillis();
+                    }
                 } catch (Exception ex) {
                     synchronized (System.out) {
                         System.out.println(ex.getMessage());
