@@ -33,7 +33,7 @@ public class mod_TeamInfo extends BaseMod {
     private final TeamStatsAPI api;
 
     public String getVersion() {
-        return "For MC version 1.5.2";
+        return "For MC version 1.6.1";
     }
 
     public mod_TeamInfo() throws IllegalAccessException {
