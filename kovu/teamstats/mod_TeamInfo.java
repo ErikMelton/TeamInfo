@@ -27,7 +27,6 @@ public class mod_TeamInfo extends BaseMod {
     public Kovu kovu;
     public Minecraft mc = ModLoader.getMinecraftInstance();
     public EntityClientPlayerMP player;
-    private static mod_TeamInfo instance;
     public SkinHandler sk;
     public static GuiTeamInfoIngame ingame = new GuiTeamInfoIngame();
     private static final Logger logger = Logger.getLogger(mod_TeamInfo.class.getName());
@@ -40,17 +39,13 @@ public class mod_TeamInfo extends BaseMod {
     public mod_TeamInfo() throws IllegalAccessException {
         sk = new SkinHandler();
 
-        if (instance == null) {
-            instance = this;
-        } else {
-            throw new IllegalAccessException("Attemped to recreate instance for TeamStats");
-        }
         TeamStatsAPI temp;
         try {
             temp = new TeamStatsAPI(mc.func_110432_I().func_111285_a(), mc.func_110432_I().func_111286_b());
             if (temp == null) {
                 throw new NullPointerException("API is null");
             }
+            TeamStatsAPI.setAPI(temp);
         } catch (Exception ex) {
             temp = null;
             System.out.println("We had an error on the API");
@@ -61,7 +56,6 @@ public class mod_TeamInfo extends BaseMod {
             }
         }
         api = temp;
-        TeamStatsAPI.setAPI(api);
         ModLoader.registerKey(instance, new KeyBinding("TStats", Keyboard.KEY_0), false);
         ModLoader.registerKey(instance, new KeyBinding("Change Location", Keyboard.KEY_EQUALS), false);
         ModLoader.setInGameHook(instance, true, true);
@@ -142,9 +136,5 @@ public class mod_TeamInfo extends BaseMod {
             i++;
         }
         return true;
-    }
-
-    public static mod_TeamInfo getInstance() {
-        return instance;
     }
 }
