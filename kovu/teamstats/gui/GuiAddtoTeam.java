@@ -18,6 +18,7 @@ public class GuiAddtoTeam extends GuiScreen {
         parentScreen = guiscreen;
     }
 
+    @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         buttonList.clear();
@@ -27,20 +28,20 @@ public class GuiAddtoTeam extends GuiScreen {
         serverTextField.setVisible(true);
         serverTextField.setFocused(true);
         serverTextField.setText("");
-
     }
 
+    @Override
     public void actionPerformed(GuiButton guibutton) {
-        if (guibutton.id == 0 && serverTextField.getText() != mc.func_110432_I().func_111285_a() && serverTextField.getText() != "") {
+        if (guibutton.id == 0 && serverTextField.getText() != mc.func_110432_I().func_111285_a() && !serverTextField.getText().isEmpty()) {
             String s = serverTextField.getText();
             try {
                 TeamStatsAPI.getAPI().addFriend(s);
                 TeamStatsAPI.getAPI().forceUpdate();
             } catch (Exception e) {
-                e.printStackTrace();
+                e.printStackTrace(System.err);
             }
             Kovu.friends.add(s);
-            mc.thePlayer.addChatMessage((new StringBuilder()).append("A request has been sent to \247c").append(serverTextField.getText()).toString());
+            mc.thePlayer.addChatMessage(new StringBuilder().append("A request has been sent to \247c").append(serverTextField.getText()).toString());
             mc.displayGuiScreen(null);
         }
 
@@ -50,6 +51,7 @@ public class GuiAddtoTeam extends GuiScreen {
         }
     }
 
+    @Override
     public void keyTyped(char c, int i) {
         serverTextField.textboxKeyTyped(c, i);
         if (c == '\r') {
@@ -62,17 +64,19 @@ public class GuiAddtoTeam extends GuiScreen {
         return false;
     }
 
+    @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
     }
 
+    @Override
     public void mouseClicked(int i, int j, int k) {
         super.mouseClicked(i, j, k);
         serverTextField.mouseClicked(i, j, k);
         serverTextField.updateCursorCounter();
     }
 
-
+    @Override
     public void drawScreen(int i, int j, float f) {
         drawRect(width / 2 - 120, height / 2 - 50, width / 2 + 120, height / 2 + 30, 0x60000000);
         drawCenteredString(fontRenderer, "Add Player", width / 2, height / 2 - 43, 0xffffff);
@@ -80,6 +84,7 @@ public class GuiAddtoTeam extends GuiScreen {
         super.drawScreen(i, j, f);
     }
 
+    @Override
     public void updateScreen() {
         if (Keyboard.isKeyDown(15)) {
             Kovu.showlist = true;

@@ -32,6 +32,7 @@ public class mod_TeamInfo extends BaseMod {
     private static final Logger logger = Logger.getLogger(mod_TeamInfo.class.getName());
     private final TeamStatsAPI api;
 
+    @Override
     public String getVersion() {
         return "For MC version 1.6.1";
     }
@@ -42,9 +43,6 @@ public class mod_TeamInfo extends BaseMod {
         TeamStatsAPI temp;
         try {
             temp = new TeamStatsAPI(mc.func_110432_I().func_111285_a(), mc.func_110432_I().func_111286_b());
-            if (temp == null) {
-                throw new NullPointerException("API is null");
-            }
             TeamStatsAPI.setAPI(temp);
         } catch (Exception ex) {
             temp = null;
@@ -56,9 +54,9 @@ public class mod_TeamInfo extends BaseMod {
             }
         }
         api = temp;
-        ModLoader.registerKey(instance, new KeyBinding("TStats", Keyboard.KEY_0), false);
-        ModLoader.registerKey(instance, new KeyBinding("Change Location", Keyboard.KEY_EQUALS), false);
-        ModLoader.setInGameHook(instance, true, true);
+        ModLoader.registerKey(this, new KeyBinding("TStats", Keyboard.KEY_0), false);
+        ModLoader.registerKey(this, new KeyBinding("Change Location", Keyboard.KEY_EQUALS), false);
+        ModLoader.setInGameHook(this, true, true);
         sk.makeSkinDir();
         rejectRequest = "NOTACCEPTED";
     }
@@ -81,6 +79,7 @@ public class mod_TeamInfo extends BaseMod {
         }
     }
 
+    @Override
     public void load() {
     }
 
@@ -110,7 +109,6 @@ public class mod_TeamInfo extends BaseMod {
 
     @Override
     public boolean onTickInGame(float tick, Minecraft mc) {
-
         if (kovu == null) {
             kovu = new Kovu(mc);
         }

@@ -20,14 +20,16 @@ public class GuiRemoveFromTeam extends GuiScreen {
     int i;
     String[] friends;
     List list;
-    public GuiAddtoTeam ga = new GuiAddtoTeam(parentScreen);
+    public GuiAddtoTeam ga;
 
     public GuiRemoveFromTeam(GuiScreen guiscreen) {
         players = 0;
         extra = 0;
         parentScreen = guiscreen;
+        ga = new GuiAddtoTeam(parentScreen);
     }
 
+    @Override
     public void updateScreen() {
         if (Keyboard.isKeyDown(15)) {
             Kovu.showlist = true;
@@ -36,12 +38,13 @@ public class GuiRemoveFromTeam extends GuiScreen {
         }
     }
 
+    @Override
     public void drawScreen(int i, int j, float f) {
         try {
 
             i = TeamStatsAPI.getAPI().getFriends().length;
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
 
         byte byte0 = 0;
@@ -58,6 +61,7 @@ public class GuiRemoveFromTeam extends GuiScreen {
         super.drawScreen(i, j, f);
     }
 
+    @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         buttonList.clear();
@@ -66,14 +70,10 @@ public class GuiRemoveFromTeam extends GuiScreen {
         try {
             //friends = FriendModApi.getFriends().clone();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
         System.out.println(friends);
-        java.util.List list = Arrays.asList(friends);
-        //TODO: Once actual server is up, use the server instead
-        //for(Iterator iterator = list.iterator(); iterator.hasNext();) {
-        for (Iterator iterator = Kovu.friends.iterator(); iterator.hasNext();) {
-            String s = (String) iterator.next();
+        for (String s : Kovu.friends) {
             if (players % 2 == 0) {
                 buttonList.add(new GuiButton(players, width / 2 - 90, (height / 2 - 20) + 23 * (players / 2), 80, 20, s));
             } else {
@@ -88,18 +88,20 @@ public class GuiRemoveFromTeam extends GuiScreen {
         buttonList.add(new GuiButton(players, width / 2 - 30, (height / 2 - 20) + 23 * (players / 2 + extra), 60, 20, "Back"));
     }
 
+    @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
     }
 
+    @Override
     public void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == players) {
             mc.displayGuiScreen(parentScreen);
         }
 
-        java.util.List list = Arrays.asList(friends);
+        List l = Arrays.asList(friends);
 
-        for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+        for (Iterator iterator = l.iterator(); iterator.hasNext();) {
             String s1 = (String) iterator.next();
             if (guibutton.id == i) {
                 try {
@@ -107,9 +109,7 @@ public class GuiRemoveFromTeam extends GuiScreen {
                     TeamStatsAPI.getAPI().removeFriend(s1);
                     buttonList.remove(i);
                 } catch (IOException e) {
-
-                    e.printStackTrace();
-
+                    e.printStackTrace(System.err);
                 }
                 mc.displayGuiScreen(new GuiRemoveFromTeam(new GuiTeamInfo(null)));
                 return;
@@ -118,6 +118,7 @@ public class GuiRemoveFromTeam extends GuiScreen {
         }
     }
 
+    @Override
     public void mouseClicked(int i, int j, int k) {
         super.mouseClicked(i, j, k);
     }

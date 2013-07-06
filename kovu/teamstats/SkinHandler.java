@@ -116,7 +116,5 @@ public class SkinHandler {
 
         //GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureContentsMap.hashCode());
         //gig.drawTexturedModalRect(5, 5, 8, 8, 8, 8);
-
-
     }
 }

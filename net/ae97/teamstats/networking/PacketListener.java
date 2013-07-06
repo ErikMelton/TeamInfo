@@ -2,12 +2,8 @@ package net.ae97.teamstats.networking;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.util.Iterator;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.ae97.teamstats.ClientRequest;
@@ -17,15 +13,15 @@ import net.ae97.teamstats.ClientRequest;
  * @author Lord_Ralex
  */
 public class PacketListener extends Thread {
-
+    
     private final ConcurrentLinkedQueue<Packet> queue = new ConcurrentLinkedQueue<Packet>();
     private final WatchableObjectInputStream inputStream;
-
+    
     public PacketListener(InputStream input) throws IOException {
         super();
         inputStream = new WatchableObjectInputStream(input);
     }
-
+    
     public Packet getNextPacket(int idOfPacket, boolean isReply) {
         Iterator<Packet> itt;
         synchronized (queue) {
@@ -46,23 +42,27 @@ public class PacketListener extends Thread {
         //add a delay to the packet check
         DelayThread thread = new DelayThread();
         thread.start();
-        while (thread.isAlive()) {
-        };
+        try {
+            thread.join();
+        } catch (InterruptedException ex) {
+            ex.printStackTrace(System.err);
+        }
         return getNextPacket(idOfPacket, isReply);
     }
-
+    
     public Packet getNextPacket(int idOfPacket) {
         return getNextPacket(idOfPacket, false);
     }
-
+    
     public Packet getNextPacket(ClientRequest idOfPacket, boolean isReply) {
         return getNextPacket(idOfPacket.getID(), isReply);
     }
-
+    
     public Packet getNextPacket(ClientRequest idOfPacket) {
         return getNextPacket(idOfPacket, false);
     }
-
+    
+    @Override
     public void run() {
         boolean run = true;
         while (run) {
@@ -87,9 +87,10 @@ public class PacketListener extends Thread {
             }
         }
     }
-
+    
     private class DelayThread extends Thread {
-
+        
+        @Override
         public void run() {
             synchronized (DelayThread.this) {
                 try {

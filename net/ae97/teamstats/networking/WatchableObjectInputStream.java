@@ -20,6 +20,7 @@ public class WatchableObjectInputStream extends ObjectInputStream {
         super(in);
     }
 
+    @Override
     public void close() throws IOException {
         isClosed = true;
         super.close();
