@@ -122,8 +122,7 @@ public class GuiTeamInfoIngame extends GuiScreen {
 	
 	public void getCroppedFacialImage(String username)
 	{
-		File skin = new File(mc.getMinecraftDir() + File.separator +
-				"dlskins" + File.separator + username + ".png");
+		File skin = new File(".dlskins" + File.separator + username + ".png");
 		try
 		{
 			BufferedImage skinBR = ImageIO.read(skin);

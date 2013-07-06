@@ -31,7 +31,7 @@ public class GuiAddtoTeam extends GuiScreen {
     }
 
     public void actionPerformed(GuiButton guibutton) {
-        if (guibutton.id == 0 && serverTextField.getText() != mc.session.username && serverTextField.getText() != "") {
+        if (guibutton.id == 0 && serverTextField.getText() != mc.func_110432_I().func_111285_a() && serverTextField.getText() != "") {
             String s = serverTextField.getText();
             try {
                 TeamStatsAPI.getAPI().addFriend(s);

@@ -27,6 +27,5 @@ public class TeamInfoMod {
     public void preInit(FMLPreInitializationEvent evt)
     {
     	NetworkRegistry.instance().registerGuiHandler(instance, new GuiHandler());
-    	proxy.initCapes();
     }
 }

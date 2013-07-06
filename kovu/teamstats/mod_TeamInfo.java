@@ -47,7 +47,7 @@ public class mod_TeamInfo extends BaseMod {
         }
         TeamStatsAPI temp;
         try {
-            temp = new TeamStatsAPI(mc.session.username, mc.session.sessionId);
+            temp = new TeamStatsAPI(mc.func_110432_I().func_111285_a(), mc.func_110432_I().func_111286_b());
             if (temp == null) {
                 throw new NullPointerException("API is null");
             }
@@ -95,7 +95,7 @@ public class mod_TeamInfo extends BaseMod {
         stats.put("POSX", kovu.mc.thePlayer.posX);
         stats.put("POSY", kovu.mc.thePlayer.posY);
         stats.put("POSZ", kovu.mc.thePlayer.posZ);
-        stats.put("HP", kovu.mc.thePlayer.getHealth());
+        stats.put("HP", kovu.mc.thePlayer.func_110143_aJ());
         stats.put("FD", kovu.mc.thePlayer.getFoodStats().getFoodLevel());
         stats.put("AR", kovu.mc.thePlayer.getTotalArmorValue());
         stats.put("PS", kovu.mc.thePlayer.isPotionActive(Potion.poison));

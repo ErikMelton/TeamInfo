@@ -26,7 +26,7 @@ import cpw.mods.fml.common.FMLLog;
 
 public class SkinHandler {
 
-    File skinFolder = new File(Minecraft.getMinecraftDir() + "\\dlskins");
+    File skinFolder = new File("." + File.separator + "dlskins");
     //Know the params?
     private BufferedImage missingTextureImage = new BufferedImage(64, 64, 2);
     public static Logger log = FMLLog.getLogger();
