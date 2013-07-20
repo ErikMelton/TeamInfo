@@ -21,15 +21,7 @@
 /src/mcpmod.info
 
 ##Git
-.gitignore
+#.gitignore
 
 ##Maven
 pom.xml
-
-#Netbeans
-/nbproject/
-/lib/
-/build/
-/dist/
-build.xml
-manifest.mf
