@@ -2,12 +2,12 @@ package kovu.teamstats;
 
 import java.util.EnumSet;
 
-import kovu.teamstats.api.TeamStatsAPI;
 import kovu.teamstats.gui.GuiTeamInfoIngame;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
+import net.ae97.teamstats.api.TeamstatsAPI;
 
 public class ClientTickHandler implements ITickHandler {
 
@@ -66,26 +66,6 @@ public class ClientTickHandler implements ITickHandler {
 
         if (Kovu.isInGUI == true) {
             mainGui.drawMain();
-        }
-
-        try {
-            String[] temp = TeamStatsAPI.getAPI().getNewFriendRequests(false);
-
-            if (temp.length == 0) {
-                System.out.println("temp.length = 0");
-            }
-            //temp's length is always 0 for some reason
-
-            for (String name : temp) {
-                //TODO: DE BJOIEHOUAHEG THIS CODE
-                System.out.println("Inside of Friend request loop");
-//  			List<String> ftemp = Arrays.asList(temp);
-//    			selectedFriend = ftemp.get(0);
-                System.out.println(name);
-            }
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-            System.out.println("Client failed to get friend requests");
         }
     }
 }

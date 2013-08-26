@@ -1,7 +1,7 @@
 package kovu.teamstats.gui;
 
 import kovu.teamstats.Kovu;
-import kovu.teamstats.api.TeamStatsAPI;
+import net.ae97.teamstats.api.TeamstatsAPI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -35,8 +35,7 @@ public class GuiAddtoTeam extends GuiScreen {
         if (guibutton.id == 0 && serverTextField.getText() != mc.func_110432_I().func_111285_a() && !serverTextField.getText().isEmpty()) {
             String s = serverTextField.getText();
             try {
-                TeamStatsAPI.getAPI().addFriend(s);
-                TeamStatsAPI.getAPI().forceUpdate();
+                TeamstatsAPI.getAPI().addFriend(s);
             } catch (Exception e) {
                 e.printStackTrace(System.err);
             }

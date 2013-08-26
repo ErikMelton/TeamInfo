@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import kovu.teamstats.Kovu;
-import kovu.teamstats.api.TeamStatsAPI;
+import net.ae97.teamstats.api.TeamstatsAPI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
@@ -40,12 +40,7 @@ public class GuiRemoveFromTeam extends GuiScreen {
 
     @Override
     public void drawScreen(int i, int j, float f) {
-        try {
-
-            i = TeamStatsAPI.getAPI().getFriends().length;
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-        }
+        i = TeamstatsAPI.getAPI().getFriends().size();
 
         byte byte0 = 0;
         if ((i % 2 != 0) && (i != 0)) {
@@ -104,13 +99,9 @@ public class GuiRemoveFromTeam extends GuiScreen {
         for (Iterator iterator = l.iterator(); iterator.hasNext();) {
             String s1 = (String) iterator.next();
             if (guibutton.id == i) {
-                try {
-                    System.out.println("Inside of" + i);
-                    TeamStatsAPI.getAPI().removeFriend(s1);
-                    buttonList.remove(i);
-                } catch (IOException e) {
-                    e.printStackTrace(System.err);
-                }
+                System.out.println("Inside of" + i);
+                TeamstatsAPI.getAPI().removeFriend(s1);
+                buttonList.remove(i);
                 mc.displayGuiScreen(new GuiRemoveFromTeam(new GuiTeamInfo(null)));
                 return;
             }

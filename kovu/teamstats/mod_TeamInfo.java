@@ -13,9 +13,9 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.potion.Potion;
 import net.minecraft.src.BaseMod;
 import net.minecraft.src.ModLoader;
-import kovu.teamstats.api.*;
 import kovu.teamstats.gui.GuiTeamInfo;
 import kovu.teamstats.gui.GuiTeamInfoIngame;
+import net.ae97.teamstats.api.TeamstatsAPI;
 
 public class mod_TeamInfo extends BaseMod {
 
@@ -30,7 +30,7 @@ public class mod_TeamInfo extends BaseMod {
     public SkinHandler sk;
     public static GuiTeamInfoIngame ingame = new GuiTeamInfoIngame();
     private static final Logger logger = Logger.getLogger(mod_TeamInfo.class.getName());
-    private final TeamStatsAPI api;
+    private final TeamstatsAPI api;
 
     @Override
     public String getVersion() {
@@ -40,10 +40,9 @@ public class mod_TeamInfo extends BaseMod {
     public mod_TeamInfo() throws IllegalAccessException {
         sk = new SkinHandler();
 
-        TeamStatsAPI temp;
+        TeamstatsAPI temp;
         try {
-            temp = new TeamStatsAPI(mc.func_110432_I().func_111285_a(), mc.func_110432_I().func_111286_b());
-            TeamStatsAPI.setAPI(temp);
+            temp = TeamstatsAPI.getAPI();
         } catch (Exception ex) {
             temp = null;
             System.out.println("We had an error on the API");
@@ -100,11 +99,7 @@ public class mod_TeamInfo extends BaseMod {
         stats.put("HD", kovu.mc.thePlayer.isPotionActive(Potion.hunger));
         stats.put("OF", kovu.mc.thePlayer.isBurning());
 
-        try {
-            api.updateStats(stats);
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "An error has occured", e);
-        }
+        api.updateStats(stats);
     }
 
     @Override

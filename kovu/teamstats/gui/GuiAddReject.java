@@ -1,8 +1,8 @@
 package kovu.teamstats.gui;
 
 import java.io.IOException;
+import net.ae97.teamstats.api.TeamstatsAPI;
 
-import kovu.teamstats.api.TeamStatsAPI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -39,12 +39,8 @@ public class GuiAddReject extends GuiScreen {
     @Override
     public void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 0) {
-            try {
-                TeamStatsAPI.getAPI().addFriend(playername);
-                mc.thePlayer.addChatMessage("Accepted " + playername + " as a friend");
-            } catch (IOException e) {
-                e.printStackTrace(System.err);
-            }
+            TeamstatsAPI.getAPI().addFriend(playername);
+            mc.thePlayer.addChatMessage("Accepted " + playername + " as a friend");
             mc.displayGuiScreen(parentScreen);
         }
         if (guibutton.id == 1) {
