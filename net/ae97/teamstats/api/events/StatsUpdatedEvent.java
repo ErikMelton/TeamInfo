@@ -9,18 +9,27 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class StatsUpdatedEvent extends TeamstatsEvent {
 
-    private final Map<String, Map<String, Object>> stats;
+    private final Map<String, Object> oldStats;
+    private final Map<String, Object> newStats;
+    private final String friendName;
 
-    public StatsUpdatedEvent(Map<String, Map<String, Object>> newStats) {
-        stats = new ConcurrentHashMap<String, Map<String, Object>>();
-        stats.putAll(newStats);
+    public StatsUpdatedEvent(String name, Map<String, Object> old, Map<String, Object> newS) {
+        oldStats = new ConcurrentHashMap<String, Object>();
+        newStats = new ConcurrentHashMap<String, Object>();
+        friendName = name;
+        oldStats.putAll(old);
+        newStats.putAll(newS);
     }
 
-    public String[] getUpdatedList() {
-        return stats.keySet().toArray(new String[0]);
+    public Map<String, Object> getOldStats() {
+        return oldStats;
     }
 
-    public Map<String, Object> getStats(String userName) {
-        return stats.get(userName);
+    public Map<String, Object> getNewStats() {
+        return oldStats;
+    }
+
+    public String getFriendName() {
+        return friendName;
     }
 }

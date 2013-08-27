@@ -35,5 +35,7 @@ public enum Request {
     DENY_REQUEST,
     GET_NEW_REQUESTS,
     DISCONNECT,
-    GET_VERSION
+    GET_VERSION,
+    BLOCK_USER,
+    UNBLOCK_USER
 }

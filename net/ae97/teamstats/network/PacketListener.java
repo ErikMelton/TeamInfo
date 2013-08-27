@@ -26,11 +26,11 @@ public class PacketListener extends Thread implements Closeable {
     private final Queue<Packet> packetQueue = new ConcurrentLinkedQueue<Packet>();
     private final ObjectInputStream in;
     private final Socket socket;
-    private final ScheduledExecutorService es = Executors.newScheduledThreadPool(4);
+    private final ScheduledExecutorService es = Executors.newScheduledThreadPool(10);
 
-    public PacketListener(Socket s, ObjectInputStream i) {
+    public PacketListener(Socket s) throws IOException {
         socket = s;
-        in = i;
+        in = new ObjectInputStream(socket.getInputStream());
     }
 
     @Override
@@ -62,14 +62,9 @@ public class PacketListener extends Thread implements Closeable {
                 }
             }
         }
-        ScheduledFuture future = es.schedule(new Callable() {
-            @Override
-            public Object call() {
-                return waitFor(id);
-            }
-        }, 50, TimeUnit.MILLISECONDS);
+        ScheduledFuture<Packet> future = es.schedule(new Recheck(id), 50, TimeUnit.MILLISECONDS);
         try {
-            return (Packet) future.get();
+            return future.get();
         } catch (InterruptedException ex) {
             Logger.getLogger(PacketListener.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -82,5 +77,19 @@ public class PacketListener extends Thread implements Closeable {
     @Override
     public void close() throws IOException {
         this.interrupt();
+    }
+
+    private class Recheck implements Callable<Packet> {
+
+        private final int id;
+
+        protected Recheck(int i) {
+            id = i;
+        }
+
+        @Override
+        public Packet call() throws Exception {
+            return waitFor(id);
+        }
     }
 }
