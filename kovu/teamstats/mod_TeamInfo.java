@@ -99,7 +99,14 @@ public class mod_TeamInfo extends BaseMod {
         stats.put("HD", kovu.mc.thePlayer.isPotionActive(Potion.hunger));
         stats.put("OF", kovu.mc.thePlayer.isBurning());
 
-        api.updateStats(stats);
+        try
+        {
+        	api.updateStats(stats);
+        }
+        catch(IOException e)
+        {
+        	e.printStackTrace();
+        }
     }
 
     @Override

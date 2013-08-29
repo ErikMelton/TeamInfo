@@ -105,7 +105,7 @@ public class GuiTeamInfoIngame extends GuiScreen {
         try {
             BufferedImage skinBR = ImageIO.read(skin);
             BufferedImage skinCropped = skinBR.getSubimage(8, 8, 8, 8);
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.allocateAndSetupTexture(skinCropped));
+     //       GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.allocateAndSetupTexture(skinCropped));
         } catch (IOException e) {
             e.printStackTrace(System.err);
         }

@@ -28,11 +28,6 @@ public class SkinHandler {
 
     File skinFolder = new File("." + File.separator + "dlskins");
     //Know the params?
-    private BufferedImage missingTextureImage = new BufferedImage(64, 64, 2);
-    public static Logger log = FMLLog.getLogger();
-    private HashMap textureContentsMap = new HashMap();
-    private BufferedImage img;
-    private int imgID = 1000;
     private FileOutputStream fos;
 
     public void makeSkinDir() {
@@ -51,43 +46,6 @@ public class SkinHandler {
         }
     }
 
-    public int[] getTextureContents(String texture) {
-        try {
-            InputStream inputstream = new FileInputStream(texture);
-            int[] aint1;
-
-            BufferedImage bufferedimage = this.readTextureImage(inputstream);
-            TextureFXManager.instance().fixTransparency(bufferedimage, texture);
-            aint1 = this.getImageContentsAndAllocate(bufferedimage);
-
-            this.textureContentsMap.put(texture, aint1);
-            return aint1;
-        } catch (Exception ioexception) {
-            log.log(Level.INFO, String.format("An error occured reading texture file %s (getTexture)", texture), ioexception);
-            ioexception.printStackTrace(System.err);
-            int[] aint2 = this.getImageContentsAndAllocate(this.missingTextureImage);
-            this.textureContentsMap.put(texture, aint2);
-            return aint2;
-        }
-    }
-
-    private int[] getImageContentsAndAllocate(BufferedImage par1BufferedImage) {
-        return this.getImageContents(par1BufferedImage, new int[par1BufferedImage.getWidth() * par1BufferedImage.getHeight()]);
-    }
-
-    private int[] getImageContents(BufferedImage par1BufferedImage, int[] par2ArrayOfInteger) {
-        int i = par1BufferedImage.getWidth();
-        int j = par1BufferedImage.getHeight();
-        par1BufferedImage.getRGB(0, 0, i, j, par2ArrayOfInteger, 0, i);
-        return par2ArrayOfInteger;
-    }
-
-    private BufferedImage readTextureImage(InputStream par1InputStream) throws IOException {
-        BufferedImage bufferedimage = ImageIO.read(par1InputStream);
-        par1InputStream.close();
-        return bufferedimage;
-    }
-
     public void cropHeadAndDisplay(Minecraft minecraft, String playerName) {
         File playerSkin = new File(skinFolder + "\\" + playerName + ".png");
 
@@ -97,14 +55,14 @@ public class SkinHandler {
         }
 
         try {
-            img = ModLoader.loadImage(minecraft.renderEngine, playerSkin.toString());
-            minecraft.renderEngine.setupTexture(img, imgID);
+        //    img = ModLoader.loadImage(minecraft.renderEngine, playerSkin.toString());
+        //    minecraft.renderEngine.setupTexture(img, imgID);
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
 
         try {
-            int tempVar = minecraft.renderEngine.getTexture(playerSkin.toString());
+        //    int tempVar = minecraft.renderEngine.getTexture(playerSkin.toString());
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             //	minecraft.renderEngine.(tempVar);
             GuiIngame gig = new GuiIngame(minecraft);

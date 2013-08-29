@@ -100,7 +100,14 @@ public class GuiRemoveFromTeam extends GuiScreen {
             String s1 = (String) iterator.next();
             if (guibutton.id == i) {
                 System.out.println("Inside of" + i);
-                TeamstatsAPI.getAPI().removeFriend(s1);
+                try
+                {
+                    TeamstatsAPI.getAPI().removeFriend(s1);
+                }
+                catch(IOException e)
+                {
+                	e.printStackTrace();
+                }
                 buttonList.remove(i);
                 mc.displayGuiScreen(new GuiRemoveFromTeam(new GuiTeamInfo(null)));
                 return;

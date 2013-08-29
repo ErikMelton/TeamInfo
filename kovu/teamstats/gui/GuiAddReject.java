@@ -39,7 +39,14 @@ public class GuiAddReject extends GuiScreen {
     @Override
     public void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 0) {
-            TeamstatsAPI.getAPI().addFriend(playername);
+        	try
+        	{
+        		TeamstatsAPI.getAPI().addFriend(playername);
+        	}
+        	catch(IOException e)
+        	{
+        		e.printStackTrace();
+        	}
             mc.thePlayer.addChatMessage("Accepted " + playername + " as a friend");
             mc.displayGuiScreen(parentScreen);
         }
