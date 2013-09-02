@@ -2,9 +2,14 @@ package kovu.teamstats;
 
 import java.util.EnumSet;
 
+import org.lwjgl.input.Keyboard;
+
+import kovu.teamstats.gui.GuiTeamInfo;
 import kovu.teamstats.gui.GuiTeamInfoIngame;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.src.ModLoader;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import net.ae97.teamstats.api.TeamstatsAPI;
@@ -59,6 +64,20 @@ public class ClientTickHandler implements ITickHandler {
     public void onTickInGame() {
 
         Kovu.isInGUI = true;
+        
+        if (Keyboard.isKeyDown(Keyboard.KEY_0)) {
+            if (Kovu.isInGUI) {
+                ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfo(null));
+                SkinHandler.downloadSkin("Charsmud");
+                SkinHandler.downloadSkin("Rainfur");
+            }
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_EQUALS)) {
+            if (Kovu.isInGUI) {
+                ModLoader.getMinecraftInstance().thePlayer.addChatMessage("TeamStats configuration mode enabled");
+                ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfoIngame());
+            }
+        }
     }
 
     public void onRenderTick() {

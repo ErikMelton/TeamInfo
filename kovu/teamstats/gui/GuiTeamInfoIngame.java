@@ -8,8 +8,8 @@ import javax.imageio.ImageIO;
 
 import kovu.teamstats.ClientTickHandler;
 import kovu.teamstats.Kovu;
-import kovu.teamstats.mod_TeamInfo;
-
+import kovu.teamstats.SkinHandler;
+import kovu.teamstats.TeamInfoMod;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.src.ModLoader;
@@ -48,7 +48,7 @@ public class GuiTeamInfoIngame extends GuiScreen {
             drawRect(0 + dragModeX, 0 + dragModeY, 150 + dragModeX, 36 + dragModeY, 0x2200ff00);
         }
         fr.drawStringWithShadow(ModLoader.getMinecraftInstance().thePlayer.username, 5 + dragModeX, 2 + dragModeY, 0xfffffa);
-        mod_TeamInfo.ingame.processAndUpdateImages(1200 + (dragModeX * 10), 50 + (dragModeY * 10));
+        processAndUpdateImages(1200 + (dragModeX * 10), 50 + (dragModeY * 10));
     }
 
     @Override
@@ -101,11 +101,13 @@ public class GuiTeamInfoIngame extends GuiScreen {
     }
 
     public void getCroppedFacialImage(String username) {
-        File skin = new File(".dlskins" + File.separator + username + ".png");
+        File skin = new File("dlskins" + File.separator + username + ".png");
         try {
             BufferedImage skinBR = ImageIO.read(skin);
             BufferedImage skinCropped = skinBR.getSubimage(8, 8, 8, 8);
-     //       GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.allocateAndSetupTexture(skinCropped));
+            
+            int texture = SkinHandler.loadTexture(skinCropped);
+            
         } catch (IOException e) {
             e.printStackTrace(System.err);
         }
