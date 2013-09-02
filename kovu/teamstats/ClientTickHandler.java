@@ -19,6 +19,8 @@ public class ClientTickHandler implements ITickHandler {
     private int ticksPassed = 0;
     public static String selectedFriend;
     private GuiTeamInfoIngame mainGui;
+    
+    private boolean hasBeenPressed = false;
 
     public ClientTickHandler() {
         mainGui = new GuiTeamInfoIngame();
@@ -76,6 +78,7 @@ public class ClientTickHandler implements ITickHandler {
             if (Kovu.isInGUI) {
                 ModLoader.getMinecraftInstance().thePlayer.addChatMessage("TeamStats configuration mode enabled");
                 ModLoader.openGUI(ModLoader.getMinecraftInstance().thePlayer, new GuiTeamInfoIngame());
+                hasBeenPressed = true;
             }
         }
     }
@@ -86,5 +89,7 @@ public class ClientTickHandler implements ITickHandler {
         if (Kovu.isInGUI == true) {
             mainGui.drawMain();
         }
+        
+        mainGui.drawMain();
     }
 }

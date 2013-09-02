@@ -13,12 +13,14 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.potion.Potion;
 import net.minecraft.src.ModLoader;
 import net.minecraftforge.common.MinecraftForge;
+import kovu.teamstats.gui.GuiDraggable;
 import kovu.teamstats.gui.GuiHandler;
 import kovu.teamstats.gui.GuiTeamInfoIngame;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
@@ -39,9 +41,13 @@ public class TeamInfoMod {
     private TeamstatsAPI api;
 
     @EventHandler
-    public void load(FMLInitializationEvent evt) {
+    public void preInit(FMLPreInitializationEvent evt) {
+        NetworkRegistry.instance().registerGuiHandler(instance, new GuiHandler());
+    }
+    
+    @EventHandler
+    public void init(FMLInitializationEvent evt) {
         proxy.registerRenderInformation();
-        MinecraftForge.EVENT_BUS.register(new TeamStatsHookContainer());
         
         TeamstatsAPI temp;
         try {
@@ -61,8 +67,9 @@ public class TeamInfoMod {
     }
 
     @EventHandler
-    public void preInit(FMLPreInitializationEvent evt) {
-        NetworkRegistry.instance().registerGuiHandler(instance, new GuiHandler());
+    public void postInit(FMLPostInitializationEvent event)
+    {
+        MinecraftForge.EVENT_BUS.register(new TeamStatsHookContainer());
     }
     
     //Was called every tick

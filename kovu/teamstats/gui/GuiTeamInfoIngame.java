@@ -42,6 +42,7 @@ public class GuiTeamInfoIngame extends GuiScreen {
     }
 
     public void clickableGuiMode(FontRenderer fr) {
+    	System.out.println("Drawing");
         if (isModeOpen) {
             drawRect(110 + dragModeX, 2 + dragModeY, 118 + dragModeX, 10 + dragModeY, 0x2200ff00);
         } else {
@@ -67,13 +68,11 @@ public class GuiTeamInfoIngame extends GuiScreen {
         super.drawScreen(i, j, f);
     }
 
-    public void drawMain() {
-        if (font == null) {
-            if (init == false) {
-                ModLoader.getMinecraftInstance().thePlayer.addChatMessage(EnumChatFormatting.GREEN + "Please press 0 and then = to initialize and customize TeamStats" + EnumChatFormatting.RESET);
-                init = true;
-            }
-            return;
+    public void drawMain() 
+    {
+        if (font == null || ModLoader.getMinecraftInstance().thePlayer == null) 
+        {
+        	return;
         }
         if (Kovu.isVersion) {
             font.drawStringWithShadow("TeamStats Dev 0.4.0", 2, 2, 0x00ff00);
