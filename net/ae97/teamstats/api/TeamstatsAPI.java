@@ -148,6 +148,14 @@ public final class TeamstatsAPI {
                 if (socket.isClosed() || !socket.isConnected()) {
                     break;
                 }
+                NewFriendEvent asdf = new NewFriendEvent("Billy Bob Joe");
+                try {
+                    System.out.println("Test event firing");
+                    MinecraftForge.EVENT_BUS.post(asdf);
+                    System.out.println("Test event fired");
+                } catch (Exception e) {
+                    Logger.getLogger(TeamstatsAPI.class.getName()).log(Level.SEVERE, "Error running NewFriendEvent for " + asdf, e);
+                }
                 try {
                     Packet newFriendPacket = new Packet(Request.GET_NEW_FRIENDS);
                     sendPacket(newFriendPacket);
