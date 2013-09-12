@@ -7,6 +7,8 @@ import org.lwjgl.input.Keyboard;
 import kovu.teamstats.gui.GuiTeamInfo;
 import kovu.teamstats.gui.GuiTeamInfoIngame;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiIngameMenu;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.src.ModLoader;
@@ -58,8 +60,8 @@ public class ClientTickHandler implements ITickHandler {
         return null;
     }
 
-    public void onTickInGUI(GuiScreen guiscreen) {
-
+    public void onTickInGUI(GuiScreen guiscreen)
+    {
         Kovu.isInGUI = false;
     }
 
