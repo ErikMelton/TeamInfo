@@ -35,7 +35,7 @@ public final class TeamstatsAPI {
     private volatile Socket socket;
     private volatile PacketListener packetListener;
     private volatile PacketSender packetSender;
-    private volatile Thread updateThread;
+    private final Thread updateThread = new Thread(new UpdateDataThread());
 
     private TeamstatsAPI() {
     }
@@ -60,7 +60,6 @@ public final class TeamstatsAPI {
             packetListener.close();
             socket.close();
         }
-        updateThread = new Thread(new UpdateDataThread());
         updateThread.start();
     }
 
@@ -218,7 +217,6 @@ public final class TeamstatsAPI {
                 } catch (IOException e) {
                     Logger.getLogger(TeamstatsAPI.class.getName()).log(Level.SEVERE, "Error updating stats", e);
                 }
-
             }
         }
     }
