@@ -152,13 +152,9 @@ public final class TeamstatsAPI {
                     break;
                 }
                 NewFriendEvent asdf = new NewFriendEvent("Billy Bob Joe");
-                try {
-                    System.out.println("Test event firing");
-                    eventManager.invokeEvent(asdf);
-                    System.out.println("Test event fired");
-                } catch (Exception e) {
-                    Logger.getLogger(TeamstatsAPI.class.getName()).log(Level.SEVERE, "Error running NewFriendEvent for " + asdf, e);
-                }
+                System.out.println("Test event firing");
+                eventManager.invokeEvent(asdf);
+                System.out.println("Test event fired");
                 try {
                     Packet newFriendPacket = new Packet(Request.GET_NEW_FRIENDS);
                     sendPacket(newFriendPacket);
@@ -166,11 +162,7 @@ public final class TeamstatsAPI {
                     Set<String> names = (Set<String>) reply.get("reply");
                     for (String name : names) {
                         NewFriendEvent newFriendEvent = new NewFriendEvent(name);
-                        try {
-                            eventManager.invokeEvent(newFriendEvent);
-                        } catch (Exception e) {
-                            Logger.getLogger(TeamstatsAPI.class.getName()).log(Level.SEVERE, "Error running NewFriendEvent for " + name, e);
-                        }
+                        eventManager.invokeEvent(newFriendEvent);
                     }
 
                     Packet newReqPacket = new Packet(Request.GET_NEW_REQUESTS);
@@ -179,11 +171,7 @@ public final class TeamstatsAPI {
                     names = (Set<String>) reply.get("reply");
                     for (String name : names) {
                         NewRequestEvent newRequestEvent = new NewRequestEvent(name);
-                        try {
-                            eventManager.invokeEvent(newRequestEvent);
-                        } catch (Exception e) {
-                            Logger.getLogger(TeamstatsAPI.class.getName()).log(Level.SEVERE, "Error running NewRequestEvent for " + name, e);
-                        }
+                        eventManager.invokeEvent(newRequestEvent);
                     }
 
                     Packet getFriends = new Packet(Request.GET_FRIENDS);
@@ -212,11 +200,7 @@ public final class TeamstatsAPI {
                             friendData.put(friend, newStatData);
                         }
                         StatsUpdatedEvent updateEvent = new StatsUpdatedEvent(friend, oldStats, newStatData);
-                        try {
-                            eventManager.invokeEvent(updateEvent);
-                        } catch (Exception e) {
-                            Logger.getLogger(TeamstatsAPI.class.getName()).log(Level.SEVERE, "Error running StatsUpdatedEvent for " + friend, e);
-                        }
+                        eventManager.invokeEvent(updateEvent);
                     }
                 } catch (IOException e) {
                     Logger.getLogger(TeamstatsAPI.class.getName()).log(Level.SEVERE, "Error updating stats", e);
