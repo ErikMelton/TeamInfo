@@ -4,7 +4,7 @@ package net.ae97.teamstats.api.events;
  * @version 1.0
  * @author Lord_Ralex
  */
-public class NewRequestEvent extends TeamstatsEvent {
+public class NewRequestEvent implements TeamstatsEvent {
 
     private final String newRequestName;
 

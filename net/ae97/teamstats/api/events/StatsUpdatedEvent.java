@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version 1.0
  * @author Lord_Ralex
  */
-public class StatsUpdatedEvent extends TeamstatsEvent {
+public class StatsUpdatedEvent implements TeamstatsEvent {
 
     private final Map<String, Object> oldStats;
     private final Map<String, Object> newStats;

@@ -19,7 +19,6 @@ import net.ae97.teamstats.network.PacketListener;
 import net.ae97.teamstats.network.PacketSender;
 import net.ae97.teamstats.network.api.Packet;
 import net.ae97.teamstats.network.api.Request;
-import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @version 1.0
@@ -36,6 +35,7 @@ public final class TeamstatsAPI {
     private volatile PacketListener packetListener;
     private volatile PacketSender packetSender;
     private final Thread updateThread = new Thread(new UpdateDataThread());
+    private final EventManager eventManager = new EventManager();
 
     private TeamstatsAPI() {
     }
@@ -61,6 +61,10 @@ public final class TeamstatsAPI {
             socket.close();
         }
         updateThread.start();
+    }
+
+    public void registerListener(TeamstatListener listener) {
+        eventManager.registerListener(listener);
     }
 
     public void sendPacket(Packet packet) throws IOException {
@@ -150,7 +154,7 @@ public final class TeamstatsAPI {
                 NewFriendEvent asdf = new NewFriendEvent("Billy Bob Joe");
                 try {
                     System.out.println("Test event firing");
-                    MinecraftForge.EVENT_BUS.post(asdf);
+                    eventManager.invokeEvent(asdf);
                     System.out.println("Test event fired");
                 } catch (Exception e) {
                     Logger.getLogger(TeamstatsAPI.class.getName()).log(Level.SEVERE, "Error running NewFriendEvent for " + asdf, e);
@@ -163,7 +167,7 @@ public final class TeamstatsAPI {
                     for (String name : names) {
                         NewFriendEvent newFriendEvent = new NewFriendEvent(name);
                         try {
-                            MinecraftForge.EVENT_BUS.post(newFriendEvent);
+                            eventManager.invokeEvent(newFriendEvent);
                         } catch (Exception e) {
                             Logger.getLogger(TeamstatsAPI.class.getName()).log(Level.SEVERE, "Error running NewFriendEvent for " + name, e);
                         }
@@ -176,7 +180,7 @@ public final class TeamstatsAPI {
                     for (String name : names) {
                         NewRequestEvent newRequestEvent = new NewRequestEvent(name);
                         try {
-                            MinecraftForge.EVENT_BUS.post(newRequestEvent);
+                            eventManager.invokeEvent(newRequestEvent);
                         } catch (Exception e) {
                             Logger.getLogger(TeamstatsAPI.class.getName()).log(Level.SEVERE, "Error running NewRequestEvent for " + name, e);
                         }
@@ -209,7 +213,7 @@ public final class TeamstatsAPI {
                         }
                         StatsUpdatedEvent updateEvent = new StatsUpdatedEvent(friend, oldStats, newStatData);
                         try {
-                            MinecraftForge.EVENT_BUS.post(updateEvent);
+                            eventManager.invokeEvent(updateEvent);
                         } catch (Exception e) {
                             Logger.getLogger(TeamstatsAPI.class.getName()).log(Level.SEVERE, "Error running StatsUpdatedEvent for " + friend, e);
                         }
