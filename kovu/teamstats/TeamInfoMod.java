@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import org.lwjgl.input.Keyboard;
 
+import net.ae97.teamstats.api.TeamstatListener;
 import net.ae97.teamstats.api.TeamstatsAPI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -64,12 +65,7 @@ public class TeamInfoMod {
         api = temp;
         SkinHandler.makeSkinDir();
         rejectRequest = "NOTACCEPTED";
-    }
-
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event)
-    {
-
+        TeamstatsAPI.getAPI().registerListener(new TeamstatEventListener());
     }
     
     //Was called every tick
