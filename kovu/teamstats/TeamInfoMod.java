@@ -69,7 +69,7 @@ public class TeamInfoMod {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
-        MinecraftForge.EVENT_BUS.register(new TeamStatsHookContainer());
+
     }
     
     //Was called every tick
