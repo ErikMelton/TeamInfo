@@ -1,9 +1,5 @@
 package kovu.teaminfo;
 
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 

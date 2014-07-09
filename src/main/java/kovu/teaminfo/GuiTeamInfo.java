@@ -1,17 +1,7 @@
 package kovu.teaminfo;
 
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.ImageBufferDownload;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
-import net.minecraft.client.renderer.texture.ITextureObject;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class GuiTeamInfo extends GuiScreen 

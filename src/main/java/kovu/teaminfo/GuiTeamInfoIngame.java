@@ -1,19 +1,7 @@
 package kovu.teaminfo;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
-
-import javax.imageio.ImageIO;
-
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -53,7 +41,7 @@ public class GuiTeamInfoIngame extends GuiIngameForge
 	int prevposZ = 0;
 	int notequal;
 	
-	public static Map<String, Boolean> playerInfo = new HashMap();
+	public static Map<String, Boolean> playerInfo = new HashMap<String, Boolean>();
 	ResourceLocation location;
 	
 	public GuiTeamInfoIngame(Minecraft mc) 
@@ -167,12 +155,11 @@ public class GuiTeamInfoIngame extends GuiIngameForge
 				}
 				
 				// TODO: 2 people glitch out the heads
-				if (TeamInfo.playerskin.containsKey(player)) 
+				if (TeamInfo.players.containsKey(player)) 
 				{
 					if(!(Boolean)playerInfo.get(player))
 					{
 						location = AbstractClientPlayer.locationStevePng;
-						String usn = player;
 						
 						location = AbstractClientPlayer.getLocationSkin(player);
 						ITextureObject skinTex = AbstractClientPlayer.getDownloadImageSkin(location, player);

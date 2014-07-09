@@ -1,25 +1,7 @@
 package kovu.teaminfo;
 
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
-import java.net.MalformedURLException;
-import java.net.Socket;
-import java.net.URL;
-import java.net.UnknownHostException;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.imageio.ImageIO;
-
-import org.jibble.pircbot.IrcException;
-import org.jibble.pircbot.NickAlreadyInUseException;
-import org.lwjgl.input.Keyboard;
 
 import kovu.teaminfo.bot.Bot;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -28,16 +10,9 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.ImageBufferDownload;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
-import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 
 @Mod(modid = "teaminfo", version = "1.0")
 public class TeamInfo extends Thread 
@@ -51,45 +26,37 @@ public class TeamInfo extends Thread
 	
 	private static String channel = "#teaminfomod";
 	private static String nick;
-	
 	private static String host = "irc.esper.net";
-	private static int port = 6667;
-		
-	private boolean isRunning;
-	public static Map online = new HashMap();
-	public static Map<String, Object> players = new HashMap();
+	
+	public static Map<String, Object> players = new HashMap<String, Object>();
 
-	public static Map showgui = new HashMap();
+	public static Map<String, Boolean> showgui = new HashMap<String, Boolean>();
 
-	public static Map playershealth = new HashMap();
-	public static Map playersprevhealth = new HashMap();
-	public static Map playershunger = new HashMap();
-	public static Map playersarmour = new HashMap();
+	public static Map<String, Integer> playershealth = new HashMap<String, Integer>();
+	public static Map<String, Integer> playersprevhealth = new HashMap<String, Integer>();
+	public static Map<String, Integer> playershunger = new HashMap<String, Integer>();
+	public static Map<String, Integer> playersarmour = new HashMap<String, Integer>();
 
-	public static Map playerpoison = new HashMap();
-	public static Map playerfireresist = new HashMap();
-	public static Map playerweakness = new HashMap();
-	public static Map playerswift = new HashMap();
-	public static Map playerslow = new HashMap();
-	public static Map playerregen = new HashMap();
-	public static Map playerhungerdrain = new HashMap();
-	public static Map playeronfire = new HashMap();
+	public static Map<String, Boolean> playerpoison = new HashMap<String, Boolean>();
+	public static Map<String, Boolean> playerfireresist = new HashMap<String, Boolean>();
+	public static Map<String, Boolean> playerweakness = new HashMap<String, Boolean>();
+	public static Map<String, Boolean> playerswift = new HashMap<String, Boolean>();
+	public static Map<String, Boolean> playerslow = new HashMap<String, Boolean>();
+	public static Map<String, Boolean> playerregen = new HashMap<String, Boolean>();
+	public static Map<String, Boolean> playerhungerdrain = new HashMap<String, Boolean>();
+	public static Map<String, Boolean> playeronfire = new HashMap<String, Boolean>();
 
-	public static Map playerposX = new HashMap();
-	public static Map playerposY = new HashMap();
-	public static Map playerposZ = new HashMap();
+	public static Map<String, Integer> playerposX = new HashMap<String, Integer>();
+	public static Map<String, Integer> playerposY = new HashMap<String, Integer>();
+	public static Map<String, Integer> playerposZ = new HashMap<String, Integer>();
 
-	public static Map playerskin = new HashMap();
-
-	public static Map toplefti = new HashMap();
-	public static Map topleftj = new HashMap();
-	public static Map dragable = new HashMap();
+	public static Map<String, Integer> toplefti = new HashMap<String, Integer>();
+	public static Map<String, Integer> topleftj = new HashMap<String, Integer>();
+	public static Map<String, Boolean> dragable = new HashMap<String, Boolean>();
 		
 	@EventHandler
 	public void init(FMLInitializationEvent event) 
 	{
-		this.isRunning = true;
-		
 		KeyBindings keys = new KeyBindings();
 		keys.init();
 				
@@ -244,27 +211,6 @@ public class TeamInfo extends Thread
 
 		toplefti.put(addedPerson, Integer.valueOf(k - 110));
 		topleftj.put(addedPerson, Integer.valueOf(players.size() * 35));
-
-		URL skinUrl = null;
-		try 
-		{
-			skinUrl = new URL("http://s3.amazonaws.com/MinecraftSkins/" + addedPerson + ".png");
-		} 
-		catch (MalformedURLException e) 
-		{
-			e.printStackTrace();
-		}
-		BufferedImage bi = null;
-		try 
-		{
-			System.out.println("The skin URL is:" + skinUrl);
-			bi = ImageIO.read(skinUrl);
-		} 
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		playerskin.put(addedPerson, bi);
 	}
 	
 	public static void remove(String target) 
