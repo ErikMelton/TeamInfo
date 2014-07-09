@@ -2,9 +2,9 @@ package kovu.teaminfo.bot;
 
 import java.util.Date;
 
-import kovu.teaminfo.GuiAddReject;
 import kovu.teaminfo.TeamInfo;
-import kovu.teaminfo.Util;
+import kovu.teaminfo.gui.GuiAddReject;
+import kovu.teaminfo.util.Util;
 import net.minecraft.client.Minecraft;
 
 import org.jibble.pircbot.PircBot;

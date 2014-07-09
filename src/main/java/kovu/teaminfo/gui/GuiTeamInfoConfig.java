@@ -1,5 +1,6 @@
-package kovu.teaminfo;
+package kovu.teaminfo.gui;
 
+import kovu.teaminfo.util.Util;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 

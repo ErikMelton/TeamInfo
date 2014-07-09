@@ -1,4 +1,4 @@
-package kovu.teaminfo;
+package kovu.teaminfo.gui;
 
 import org.lwjgl.input.Mouse;
 

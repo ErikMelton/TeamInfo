@@ -1,7 +1,9 @@
-package kovu.teaminfo;
+package kovu.teaminfo.gui;
 
+import kovu.teaminfo.proxies.ClientProxy;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+
 import org.lwjgl.opengl.GL11;
 
 public class GuiTeamInfo extends GuiScreen 

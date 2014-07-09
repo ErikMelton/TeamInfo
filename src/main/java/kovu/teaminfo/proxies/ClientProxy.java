@@ -1,4 +1,4 @@
-package kovu.teaminfo;
+package kovu.teaminfo.proxies;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ImageBufferDownload;

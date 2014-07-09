@@ -4,6 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kovu.teaminfo.bot.Bot;
+import kovu.teaminfo.gui.GuiTeamInfoIngame;
+import kovu.teaminfo.handlers.KeyInputHandler;
+import kovu.teaminfo.handlers.TickHandler;
+import kovu.teaminfo.proxies.CommonProxy;
+import kovu.teaminfo.util.KeyBindings;
+import kovu.teaminfo.util.Util;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;

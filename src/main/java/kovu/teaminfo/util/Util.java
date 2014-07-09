@@ -1,4 +1,4 @@
-package kovu.teaminfo;
+package kovu.teaminfo.util;
 
 import net.minecraft.client.Minecraft;
 

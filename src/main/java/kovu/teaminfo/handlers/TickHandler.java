@@ -1,5 +1,6 @@
-package kovu.teaminfo;
+package kovu.teaminfo.handlers;
 
+import kovu.teaminfo.gui.GuiTeamInfoIngame;
 import net.minecraft.client.Minecraft;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;

@@ -1,7 +1,11 @@
-package kovu.teaminfo;
+package kovu.teaminfo.gui;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import kovu.teaminfo.TeamInfo;
+import kovu.teaminfo.util.Util;
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;

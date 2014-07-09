@@ -1,4 +1,4 @@
-package kovu.teaminfo;
+package kovu.teaminfo.proxies;
 
 public class CommonProxy 
 {
