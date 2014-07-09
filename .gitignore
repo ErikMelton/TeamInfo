@@ -1,27 +1,13 @@
-##Builds
-/target/
+## gradle
+/.gradle
+/build
 
-##Minecraft
-/src/net/
-/src/org/
-/src/Start.java
-/src/argo/
-/src/paulscode/
-/src/com/
+## ForgeGradle
+/run
 
-##Forge
-/src/cpw/
-/src/ibxm/
-/src/fml_at.cfg
-/src/fml_marker.cfg
-/src/fmlversion.properties
-/src/forge_at.cfg
-/src/forge_logo.png
-/src/mcp.png
-/src/mcpmod.info
-
-##Git
-.gitignore
-
-##Maven
-pom.xml
+## eclipse
+/.settings
+/.metadata
+/.classpath
+/.project
+/bin
