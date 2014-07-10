@@ -18,4 +18,7 @@ public class Util
 	public static boolean armour = true;
 	public static boolean noarmour = true;
 	public static boolean coords = false;
+	
+	public static String username = "USERNAME";
+	public static String password = "PASSWORD";
 }

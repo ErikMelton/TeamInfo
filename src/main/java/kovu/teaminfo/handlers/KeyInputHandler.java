@@ -1,5 +1,6 @@
 package kovu.teaminfo.handlers;
 
+import kovu.teaminfo.gui.GuiModifyTeamInfo;
 import kovu.teaminfo.gui.GuiTeamInfo;
 import kovu.teaminfo.util.KeyBindings;
 import net.minecraft.client.Minecraft;
@@ -14,6 +15,10 @@ public class KeyInputHandler
 		if(KeyBindings.mainGui.isPressed())
 		{
 			Minecraft.getMinecraft().displayGuiScreen(new GuiTeamInfo(Minecraft.getMinecraft().currentScreen));
+		}
+		if(KeyBindings.ddGui.isPressed())
+		{
+			Minecraft.getMinecraft().displayGuiScreen(new GuiModifyTeamInfo());
 		}
 	}
 }

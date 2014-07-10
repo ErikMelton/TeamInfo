@@ -16,6 +16,13 @@ public class Bot extends PircBot
 		setName(name);
 	}
 	
+	public Bot(String name, String pass)
+	{
+		System.out.println("[TeamInfo]: USN: " + name + " PAS: " + pass);
+		setName(name);
+		identify(pass);
+	}
+	
 	public void onMessage(String channel, String sender, String login, String hostName, String message)
 	{
 
