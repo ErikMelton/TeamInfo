@@ -5,6 +5,7 @@ import java.util.Map;
 
 import kovu.teaminfo.bot.Bot;
 import kovu.teaminfo.gui.GuiTeamInfoIngame;
+import kovu.teaminfo.handlers.ConfigurationHandler;
 import kovu.teaminfo.handlers.KeyInputHandler;
 import kovu.teaminfo.handlers.TickHandler;
 import kovu.teaminfo.proxies.CommonProxy;
@@ -16,23 +17,25 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.potion.Potion;
 
-@Mod(modid = "teaminfo", version = "1.0")
+@Mod(modid = "teaminfo", version = "1.0", guiFactory = "kovu.teaminfo.handlers.TeamInfoGuiFactory")
 public class TeamInfo extends Thread 
 {	
-	@SidedProxy(clientSide = "kovu.teaminfo.ClientProxy", serverSide = "kovu.teaminfo.CommonProxy")
+	@SidedProxy(clientSide = "kovu.teaminfo.proxies.ClientProxy", serverSide = "kovu.teaminfo.proxies.CommonProxy")
 	public static CommonProxy proxy;
 	
 	public static TeamInfo instance;
 	
-	private static Bot bot;
+	public static Bot bot;
 	
-	private static String channel = "#teaminfomod";
-	private static String nick;
-	private static String host = "irc.esper.net";
+	public static String channel = "#teaminfomod";
+	public static String nick;
+	public static String password;
+	public static String host = "irc.esper.net";
 	
 	public static Map<String, Object> players = new HashMap<String, Object>();
 
@@ -60,6 +63,13 @@ public class TeamInfo extends Thread
 	public static Map<String, Integer> topleftj = new HashMap<String, Integer>();
 	public static Map<String, Boolean> dragable = new HashMap<String, Boolean>();
 		
+	
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event)
+	{
+		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
+	}
+	
 	@EventHandler
 	public void init(FMLInitializationEvent event) 
 	{
@@ -68,19 +78,26 @@ public class TeamInfo extends Thread
 				
 		FMLCommonHandler.instance().bus().register(new KeyInputHandler());
 		FMLCommonHandler.instance().bus().register(new TickHandler());
+		FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
 		proxy.setupRemoteTexture();
 		
 		instance = this;
-
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
-		nick = Minecraft.getMinecraft().getSession().getUsername();
+		if(nick.equalsIgnoreCase("username"))
+		{
+			nick = Minecraft.getMinecraft().getSession().getUsername();
+		}
 		this.start();
 	}
-
+	
+	public static void syncConfig()
+	{
+	}
+	
 	public static void requestadd(String to)
 	{
 		bot.sendMessage(to, " ADDME " + "HP"
@@ -222,7 +239,6 @@ public class TeamInfo extends Thread
 	public static void remove(String target) 
 	{
 		players.remove(target);
-		Util.mc.thePlayer.sendChatMessage(target + " was removed from your team info.");
 		
 		bot.sendMessage(target, "REMOVE");
 	}
@@ -230,12 +246,19 @@ public class TeamInfo extends Thread
 	public static void forceremove(String s)
 	{
 		players.remove(s);
-		Util.mc.thePlayer.sendChatMessage(s + " requested that you stop sharing info.");
+		Minecraft.getMinecraft().thePlayer.sendChatMessage(s + " requested that you stop sharing info.");
 	}
 
 	public void run()
 	{	
-		bot = new Bot(nick);
+		if(password.equalsIgnoreCase("password") && nick.equalsIgnoreCase("username"))
+		{
+			bot = new Bot(nick);
+		}
+		else
+		{
+			bot = new Bot(nick, password);
+		}
 		bot.setVerbose(true);
 		try 
 		{
