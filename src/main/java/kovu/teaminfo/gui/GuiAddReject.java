@@ -4,6 +4,7 @@ import kovu.teaminfo.TeamInfo;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.util.EnumChatFormatting;
 
 public class GuiAddReject extends GuiScreen
 {
@@ -27,7 +28,7 @@ public class GuiAddReject extends GuiScreen
 	public void drawScreen(int i, int j, float f)
 	{
 		drawRect(width / 2 - 120, height / 2 - 20, width / 2 + 120, height / 2 + 30, 1610612736);
-		drawCenteredString(fontRendererObj, new StringBuilder().append("§c").append(this.playername).append("§f").toString() + " wants to share team info with you", width / 2, height / 2 - 13, 16777215);
+		drawCenteredString(fontRendererObj, new StringBuilder().append(EnumChatFormatting.AQUA + this.playername).toString() + EnumChatFormatting.WHITE + " wants to share team info with you", width / 2, height / 2 - 13, 16777215);
 		super.drawScreen(i, j, f);
 	}
 

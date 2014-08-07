@@ -3,6 +3,7 @@ package kovu.teaminfo.gui;
 import kovu.teaminfo.util.Util;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.EnumChatFormatting;
 
 public class GuiTeamInfoConfig extends GuiScreen 
 {
@@ -21,7 +22,7 @@ public class GuiTeamInfoConfig extends GuiScreen
 	public void drawScreen(int i, int j, float f)
 	{
 		drawRect(width / 2 - 165, height / 2 - 20, width / 2 + 165, height / 2 + 60, 1610612736);
-		drawCenteredString(fontRendererObj, "§cConfig:", width / 2, height / 2 - 13, 16777215);
+		drawCenteredString(fontRendererObj, EnumChatFormatting.RED + "Config:", width / 2, height / 2 - 13, 16777215);
 		super.drawScreen(i, j, f);
 	}
 

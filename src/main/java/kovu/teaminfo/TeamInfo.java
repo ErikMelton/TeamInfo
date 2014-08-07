@@ -9,18 +9,26 @@ import kovu.teaminfo.handlers.ConfigurationHandler;
 import kovu.teaminfo.handlers.KeyInputHandler;
 import kovu.teaminfo.handlers.TickHandler;
 import kovu.teaminfo.proxies.CommonProxy;
+import kovu.teaminfo.teamspeak.MSgc;
+import kovu.teaminfo.teamspeak.MSgig;
 import kovu.teaminfo.util.KeyBindings;
 import kovu.teaminfo.util.Util;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.potion.Potion;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.world.World;
+
+import org.lwjgl.input.Keyboard;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.potion.Potion;
 
 @Mod(modid = "teaminfo", version = "1.0", guiFactory = "kovu.teaminfo.handlers.TeamInfoGuiFactory")
 public class TeamInfo extends Thread 
@@ -35,7 +43,7 @@ public class TeamInfo extends Thread
 	public static String channel = "#teaminfomod";
 	public static String nick;
 	public static String password;
-	public static String host = "irc.esper.net";
+	public static String host = "tiirc.ajwgeek.com";
 	
 	public static Map<String, Object> players = new HashMap<String, Object>();
 
@@ -63,7 +71,17 @@ public class TeamInfo extends Thread
 	public static Map<String, Integer> topleftj = new HashMap<String, Integer>();
 	public static Map<String, Boolean> dragable = new HashMap<String, Boolean>();
 		
-	
+    public static boolean isConnected = false;
+    private boolean[] state = new boolean[150];
+    public static boolean[] cannot_toggle = new boolean[150];
+    public static MSgig ingame;
+    
+
+    public void sendTSMessage(String var1)
+    {
+        this.ingame.sendTSMessage(var1);
+    }
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
@@ -81,13 +99,15 @@ public class TeamInfo extends Thread
 		FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
 		proxy.setupRemoteTexture();
 		
+        this.ingame = new MSgig(Minecraft.getMinecraft(), Minecraft.getMinecraft().fontRenderer, this);
+
 		instance = this;
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
-		if(nick.equalsIgnoreCase("username"))
+		if(nick.equalsIgnoreCase("nickname"))
 		{
 			nick = Minecraft.getMinecraft().getSession().getUsername();
 		}
@@ -246,12 +266,12 @@ public class TeamInfo extends Thread
 	public static void forceremove(String s)
 	{
 		players.remove(s);
-		Minecraft.getMinecraft().thePlayer.sendChatMessage(s + " requested that you stop sharing info.");
+		Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(s + " requested that you stop sharing info."));
 	}
 
 	public void run()
 	{	
-		if(password.equalsIgnoreCase("password") && nick.equalsIgnoreCase("username"))
+		if(password.equalsIgnoreCase("password") && nick.equalsIgnoreCase("nickname"))
 		{
 			bot = new Bot(nick);
 		}
@@ -262,7 +282,7 @@ public class TeamInfo extends Thread
 		bot.setVerbose(true);
 		try 
 		{
-			bot.connect(host);
+			bot.connect(host, 6665);
 		} 
 		catch (Exception e)
 		{

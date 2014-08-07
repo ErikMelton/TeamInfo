@@ -3,6 +3,7 @@ package kovu.teaminfo.gui;
 import kovu.teaminfo.proxies.ClientProxy;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.EnumChatFormatting;
 
 import org.lwjgl.opengl.GL11;
 
@@ -45,7 +46,7 @@ public class GuiTeamInfo extends GuiScreen
 		GL11.glTranslated(-(width / 2 + 130), -height / 2 + 10, 0.0D);
 
 		drawRect(width / 2 - 120, height / 2 - 20, width / 2 + 120, height / 2 + 30, 1610612736);
-		drawCenteredString(fontRendererObj, "§cTeam Info by §bKovu", width / 2, height / 2 - 13, 16777215);
+		drawCenteredString(fontRendererObj, EnumChatFormatting.RED + "Team Info by " + EnumChatFormatting.BLUE + "Kovu", width / 2, height / 2 - 13, 16777215);
 		//test.drawElement();
 		super.drawScreen(i, j, f);
 	}

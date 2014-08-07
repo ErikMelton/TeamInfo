@@ -5,6 +5,7 @@ import kovu.teaminfo.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.ChatComponentText;
 
 import org.lwjgl.input.Keyboard;
 
@@ -95,7 +96,7 @@ public class GuiRemoveFromTeam extends GuiScreen
 			if (guibutton.id == playerscheck) 
 			{
 				TeamInfo.remove(s);
-				Minecraft.getMinecraft().thePlayer.sendChatMessage(s + " was removed from your team info.");
+				Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(s + " was removed from your team info."));
 				mc.displayGuiScreen(new GuiRemoveFromTeam(new GuiTeamInfo(null)));
 				return;
 			}

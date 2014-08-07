@@ -2,9 +2,11 @@ package kovu.teaminfo.gui;
 
 import kovu.teaminfo.TeamInfo;
 import kovu.teaminfo.util.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.util.ChatComponentText;
 
 import org.lwjgl.input.Keyboard;
 
@@ -66,8 +68,8 @@ public class GuiAddtoTeam extends GuiScreen
 			if ((serverTextField.getText() != mc.getSession().getUsername()) && (serverTextField.getText() != "") && (!TeamInfo.players.containsKey(this.serverTextField.getText()))) 
 			{
 				TeamInfo.requestadd(this.serverTextField.getText());
-				mc.thePlayer.sendChatMessage("A request has been sent to " + this.serverTextField.getText());
-
+				Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("A request has been sent to " + this.serverTextField.getText()));
+				
 				serverTextField.setText("");
 				mc.displayGuiScreen(null);
 			}

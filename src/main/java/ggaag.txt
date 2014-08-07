@@ -1,0 +1,1 @@
+If you have not already go to your Teamspeak client and enable to the clientquery plugin that is included with Teamspeak. Finally launch Minecraft.

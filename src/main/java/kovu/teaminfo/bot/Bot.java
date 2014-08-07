@@ -6,6 +6,7 @@ import kovu.teaminfo.TeamInfo;
 import kovu.teaminfo.gui.GuiAddReject;
 import kovu.teaminfo.util.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ChatComponentText;
 
 import org.jibble.pircbot.PircBot;
 
@@ -36,7 +37,7 @@ public class Bot extends PircBot
 		}
 		else if(message.contains("REJECT"))
 		{
-			Minecraft.getMinecraft().thePlayer.sendChatMessage("Your request was rejected by " + sender);
+			Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("Your request was rejected by " + sender));
 		}
 		else if(message.contains("REMOVE"))
 		{
@@ -48,7 +49,7 @@ public class Bot extends PircBot
 		}
 		else if(message.contains("ADDED"))
 		{
-			Minecraft.getMinecraft().thePlayer.sendChatMessage("Your request was accepted by " + sender);
+			Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("Your request was accepted by " + sender));
 			TeamInfo.add(sender);
 			TeamInfo.interpretUpdate(message, sender);
 		}

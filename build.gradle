@@ -31,7 +31,7 @@ minecraft {
 }
 
 dependencies {
-	compile 'pircbot:pircbot:1.5.0'
+
 }
 
 processResources
