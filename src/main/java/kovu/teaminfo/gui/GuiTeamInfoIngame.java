@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kovu.teaminfo.TeamInfo;
-import kovu.teaminfo.util.Util;
+import kovu.teaminfo.util.Vars;
 
 import org.lwjgl.opengl.GL11;
 
@@ -115,7 +115,7 @@ public class GuiTeamInfoIngame extends GuiIngameForge
 			{
 				GL11.glTranslatef(((Integer) TeamInfo.toplefti.get(player)).intValue(), ((Integer) TeamInfo.topleftj.get(player)).intValue(), 0.0F);
 
-				GL11.glScalef(Util.scale, Util.scale, 1.0F);
+				GL11.glScalef(Vars.scale, Vars.scale, 1.0F);
 
 				if (TeamInfo.playerfireresist.containsKey(player)) 
 				{
@@ -207,7 +207,7 @@ public class GuiTeamInfoIngame extends GuiIngameForge
 						int l13 = 27 + l10 * 8;
 						int l12 = 16;
 
-						if (Util.hunger)
+						if (Vars.hunger)
 						{
 							drawTexturedModalRect(l13, 20, 16, 27, 9, 9);
 
@@ -273,9 +273,9 @@ public class GuiTeamInfoIngame extends GuiIngameForge
 							drawTexturedModalRect(j13, k13, l11 + 45, 9 * byte5, 9, 9);
 						}
 
-						if (Util.armour) 
+						if (Vars.armour) 
 						{
-							if (Util.noarmour) 
+							if (Vars.noarmour) 
 							{
 								if (i10 >= 0) 
 								{
@@ -316,17 +316,17 @@ public class GuiTeamInfoIngame extends GuiIngameForge
 					}
 				}
 
-				if (Util.coords)
+				if (Vars.coords)
 				{
 					int coords = 30;
 
-					if (!Util.hunger)
+					if (!Vars.hunger)
 						coords -= 10;
 
 					drawString(Minecraft.getMinecraft().fontRenderer, "x" + TeamInfo.playerposX.get(player) + " y" + TeamInfo.playerposY.get(player) + " z" + TeamInfo.playerposZ.get(player), 27, coords, 16777215);
 				}
 
-				GL11.glScalef(1.0F / Util.scale, 1.0F / Util.scale, 1.0F);
+				GL11.glScalef(1.0F / Vars.scale, 1.0F / Vars.scale, 1.0F);
 
 				GL11.glTranslatef(-((Integer) TeamInfo.toplefti.get(player)).intValue(), -((Integer) TeamInfo.topleftj.get(player)).intValue(),	0.0F);
 			}

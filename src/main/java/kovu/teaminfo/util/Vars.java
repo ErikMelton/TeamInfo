@@ -2,15 +2,9 @@ package kovu.teaminfo.util;
 
 import net.minecraft.client.Minecraft;
 
-public class Util 
+public class Vars 
 {
 	public static Minecraft mc = Minecraft.getMinecraft();
-	public static boolean step = false;
-	public static int stepheight = 1;
-	public static boolean knockback = false;
-	public static boolean blockhack = true;
-	public static boolean isBlocking = false;
-	public static boolean fraps = false;
 	public static float scale = 1.0F;
 
 	public static boolean showlist = false;

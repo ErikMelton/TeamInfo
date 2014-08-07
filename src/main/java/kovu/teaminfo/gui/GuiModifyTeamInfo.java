@@ -1,7 +1,7 @@
 package kovu.teaminfo.gui;
 
 import kovu.teaminfo.TeamInfo;
-import kovu.teaminfo.util.Util;
+import kovu.teaminfo.util.Vars;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -35,7 +35,7 @@ public class GuiModifyTeamInfo extends GuiScreen
 		
 		for(String player : TeamInfo.players.keySet())
 		{
-			if((Mouse.isButtonDown(0)) && (!((Boolean)TeamInfo.dragable.get(player)).booleanValue()) && (x >= ((Integer)TeamInfo.toplefti.get(player)).intValue()) && (x <= ((Integer)TeamInfo.toplefti.get(player)).intValue() + 108.0F * Util.scale) && (y >= ((Integer)TeamInfo.topleftj.get(player)).intValue()) && (y <= ((Integer)TeamInfo.topleftj.get(player)).intValue() + this.size * Util.scale))
+			if((Mouse.isButtonDown(0)) && (!((Boolean)TeamInfo.dragable.get(player)).booleanValue()) && (x >= ((Integer)TeamInfo.toplefti.get(player)).intValue()) && (x <= ((Integer)TeamInfo.toplefti.get(player)).intValue() + 108.0F * Vars.scale) && (y >= ((Integer)TeamInfo.topleftj.get(player)).intValue()) && (y <= ((Integer)TeamInfo.topleftj.get(player)).intValue() + this.size * Vars.scale))
 			{
 				if(Keyboard.isKeyDown(Keyboard.KEY_O))
 				{
@@ -74,9 +74,9 @@ public class GuiModifyTeamInfo extends GuiScreen
 			}
 			else
 			{
-				drawCenteredString(fontRendererObj, player, (int)(108.0F * Util.scale) / 2, (int)(20.0F * Util.scale) / 2, 0xff00ff00);
+				drawCenteredString(fontRendererObj, player, (int)(108.0F * Vars.scale) / 2, (int)(20.0F * Vars.scale) / 2, 0xff00ff00);
 			}
-			drawRect(0, 0, (int)(108.0F * Util.scale), (int)(20.0F * Util.scale), color);
+			drawRect(0, 0, (int)(108.0F * Vars.scale), (int)(20.0F * Vars.scale), color);
 			GL11.glTranslatef(-((Integer)TeamInfo.toplefti.get(player)).intValue(), -((Integer)TeamInfo.topleftj.get(player)).intValue(), 0.0F);
 		}
 		super.drawScreen(arg0, arg1, arg2);
@@ -85,15 +85,15 @@ public class GuiModifyTeamInfo extends GuiScreen
 	public void initGui() 
 	{
 		Keyboard.enableRepeatEvents(true);
-		if(!Util.hunger)
+		if(!Vars.hunger)
 		{
 			size -= 10;
 		}
-		if(!Util.armour)
+		if(!Vars.armour)
 		{
 			size -=10;
 		}
-		if(!Util.coords)
+		if(!Vars.coords)
 		{
 			size -= 10;
 		}

@@ -1,5 +1,6 @@
 package kovu.teaminfo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,20 +9,15 @@ import kovu.teaminfo.gui.GuiTeamInfoIngame;
 import kovu.teaminfo.handlers.ConfigurationHandler;
 import kovu.teaminfo.handlers.KeyInputHandler;
 import kovu.teaminfo.handlers.TickHandler;
+import kovu.teaminfo.player.Player;
 import kovu.teaminfo.proxies.CommonProxy;
-import kovu.teaminfo.teamspeak.MSgc;
 import kovu.teaminfo.teamspeak.MSgig;
 import kovu.teaminfo.util.KeyBindings;
-import kovu.teaminfo.util.Util;
+import kovu.teaminfo.util.Vars;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.world.World;
-
-import org.lwjgl.input.Keyboard;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -40,46 +36,21 @@ public class TeamInfo extends Thread
 	
 	public static Bot bot;
 	
+	public static ArrayList<Player> friends = new ArrayList<Player>();
+	
 	public static String channel = "#teaminfomod";
 	public static String nick;
 	public static String password;
 	public static String host = "tiirc.ajwgeek.com";
-	
-	public static Map<String, Object> players = new HashMap<String, Object>();
-
-	public static Map<String, Boolean> showgui = new HashMap<String, Boolean>();
-
-	public static Map<String, Integer> playershealth = new HashMap<String, Integer>();
-	public static Map<String, Integer> playersprevhealth = new HashMap<String, Integer>();
-	public static Map<String, Integer> playershunger = new HashMap<String, Integer>();
-	public static Map<String, Integer> playersarmour = new HashMap<String, Integer>();
-
-	public static Map<String, Boolean> playerpoison = new HashMap<String, Boolean>();
-	public static Map<String, Boolean> playerfireresist = new HashMap<String, Boolean>();
-	public static Map<String, Boolean> playerweakness = new HashMap<String, Boolean>();
-	public static Map<String, Boolean> playerswift = new HashMap<String, Boolean>();
-	public static Map<String, Boolean> playerslow = new HashMap<String, Boolean>();
-	public static Map<String, Boolean> playerregen = new HashMap<String, Boolean>();
-	public static Map<String, Boolean> playerhungerdrain = new HashMap<String, Boolean>();
-	public static Map<String, Boolean> playeronfire = new HashMap<String, Boolean>();
-
-	public static Map<String, Integer> playerposX = new HashMap<String, Integer>();
-	public static Map<String, Integer> playerposY = new HashMap<String, Integer>();
-	public static Map<String, Integer> playerposZ = new HashMap<String, Integer>();
-
-	public static Map<String, Integer> toplefti = new HashMap<String, Integer>();
-	public static Map<String, Integer> topleftj = new HashMap<String, Integer>();
-	public static Map<String, Boolean> dragable = new HashMap<String, Boolean>();
-		
+			
     public static boolean isConnected = false;
-    private boolean[] state = new boolean[150];
     public static boolean[] cannot_toggle = new boolean[150];
     public static MSgig ingame;
     
 
     public void sendTSMessage(String var1)
     {
-        this.ingame.sendTSMessage(var1);
+        ingame.sendTSMessage(var1);
     }
 
 	@EventHandler
@@ -99,7 +70,7 @@ public class TeamInfo extends Thread
 		FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
 		proxy.setupRemoteTexture();
 		
-        this.ingame = new MSgig(Minecraft.getMinecraft(), Minecraft.getMinecraft().fontRenderer, this);
+        ingame = new MSgig(Minecraft.getMinecraft(), Minecraft.getMinecraft().fontRenderer, this);
 
 		instance = this;
 	}
@@ -114,60 +85,56 @@ public class TeamInfo extends Thread
 		this.start();
 	}
 	
-	public static void syncConfig()
-	{
-	}
-	
 	public static void requestadd(String to)
 	{
 		bot.sendMessage(to, " ADDME " + "HP"
-			+ Util.mc.thePlayer.getHealth() + "HUNGER"
-			+ Util.mc.thePlayer.getFoodStats().getFoodLevel()
-			+ "ARMOUR" + Util.mc.thePlayer.getTotalArmorValue()
+			+ Vars.mc.thePlayer.getHealth() + "HUNGER"
+			+ Vars.mc.thePlayer.getFoodStats().getFoodLevel()
+			+ "ARMOUR" + Vars.mc.thePlayer.getTotalArmorValue()
 			+ "POISON"
-			+ Util.mc.thePlayer.isPotionActive(Potion.poison)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.poison)
 			+ "FIRERESIST"
-			+ Util.mc.thePlayer.isPotionActive(Potion.fireResistance)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.fireResistance)
 			+ "WEAKNESS"
-			+ Util.mc.thePlayer.isPotionActive(Potion.weakness)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.weakness)
 			+ "SWIFT"
-			+ Util.mc.thePlayer.isPotionActive(Potion.moveSpeed)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.moveSpeed)
 			+ "SLOW"
-			+ Util.mc.thePlayer.isPotionActive(Potion.moveSlowdown)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.moveSlowdown)
 			+ "REGEN"
-			+ Util.mc.thePlayer.isPotionActive(Potion.regeneration)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.regeneration)
 			+ "HUNGERDRAIN"
-			+ Util.mc.thePlayer.isPotionActive(Potion.hunger)
-			+ "ONFIRE" + Util.mc.thePlayer.isBurning() + "POSX"
-			+ (int) Util.mc.thePlayer.posX + "POSY"
-			+ (int) Util.mc.thePlayer.posY + "POSZ"
-			+ (int) Util.mc.thePlayer.posZ);
+			+ Vars.mc.thePlayer.isPotionActive(Potion.hunger)
+			+ "ONFIRE" + Vars.mc.thePlayer.isBurning() + "POSX"
+			+ (int) Vars.mc.thePlayer.posX + "POSY"
+			+ (int) Vars.mc.thePlayer.posY + "POSZ"
+			+ (int) Vars.mc.thePlayer.posZ);
 	}
 
 	public static void acceptadd(String to) 
 	{
 		bot.sendMessage(to, " ADDED " + "HP"
-			+ Util.mc.thePlayer.getHealth() + "HUNGER"
-			+ Util.mc.thePlayer.getFoodStats().getFoodLevel()
-			+ "ARMOUR" + Util.mc.thePlayer.getTotalArmorValue()
+			+ Vars.mc.thePlayer.getHealth() + "HUNGER"
+			+ Vars.mc.thePlayer.getFoodStats().getFoodLevel()
+			+ "ARMOUR" + Vars.mc.thePlayer.getTotalArmorValue()
 			+ "POISON"
-			+ Util.mc.thePlayer.isPotionActive(Potion.poison)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.poison)
 			+ "FIRERESIST"
-			+ Util.mc.thePlayer.isPotionActive(Potion.fireResistance)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.fireResistance)
 			+ "WEAKNESS"
-			+ Util.mc.thePlayer.isPotionActive(Potion.weakness)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.weakness)
 			+ "SWIFT"
-			+ Util.mc.thePlayer.isPotionActive(Potion.moveSpeed)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.moveSpeed)
 			+ "SLOW"
-			+ Util.mc.thePlayer.isPotionActive(Potion.moveSlowdown)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.moveSlowdown)
 			+ "REGEN"
-			+ Util.mc.thePlayer.isPotionActive(Potion.regeneration)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.regeneration)
 			+ "HUNGERDRAIN"
-			+ Util.mc.thePlayer.isPotionActive(Potion.hunger)
-			+ "ONFIRE" + Util.mc.thePlayer.isBurning() + "POSX"
-			+ (int) Util.mc.thePlayer.posX + "POSY"
-			+ (int) Util.mc.thePlayer.posY + "POSZ"
-			+ (int) Util.mc.thePlayer.posZ);
+			+ Vars.mc.thePlayer.isPotionActive(Potion.hunger)
+			+ "ONFIRE" + Vars.mc.thePlayer.isBurning() + "POSX"
+			+ (int) Vars.mc.thePlayer.posX + "POSY"
+			+ (int) Vars.mc.thePlayer.posY + "POSZ"
+			+ (int) Vars.mc.thePlayer.posZ);
 		add(to);
 	}
 
@@ -180,30 +147,30 @@ public class TeamInfo extends Thread
 	public static void sendUpdate(String to)
 	{
 		bot.sendMessage(to, " UPDATE " + "HP"
-			+ Util.mc.thePlayer.getHealth() + "HUNGER"
-			+ Util.mc.thePlayer.getFoodStats().getFoodLevel()
-			+ "ARMOUR" + Util.mc.thePlayer.getTotalArmorValue()
+			+ Vars.mc.thePlayer.getHealth() + "HUNGER"
+			+ Vars.mc.thePlayer.getFoodStats().getFoodLevel()
+			+ "ARMOUR" + Vars.mc.thePlayer.getTotalArmorValue()
 			+ "POISON"
-			+ Util.mc.thePlayer.isPotionActive(Potion.poison)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.poison)
 			+ "FIRERESIST"
-			+ Util.mc.thePlayer.isPotionActive(Potion.fireResistance)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.fireResistance)
 			+ "WEAKNESS"
-			+ Util.mc.thePlayer.isPotionActive(Potion.weakness)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.weakness)
 			+ "SWIFT"
-			+ Util.mc.thePlayer.isPotionActive(Potion.moveSpeed)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.moveSpeed)
 			+ "SLOW"
-			+ Util.mc.thePlayer.isPotionActive(Potion.moveSlowdown)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.moveSlowdown)
 			+ "REGEN"
-			+ Util.mc.thePlayer.isPotionActive(Potion.regeneration)
+			+ Vars.mc.thePlayer.isPotionActive(Potion.regeneration)
 			+ "HUNGERDRAIN"
-			+ Util.mc.thePlayer.isPotionActive(Potion.hunger)
-			+ "ONFIRE" + Util.mc.thePlayer.isBurning() + "POSX"
-			+ (int) Util.mc.thePlayer.posX + "POSY"
-			+ (int) Util.mc.thePlayer.posY + "POSZ"
-			+ (int) Util.mc.thePlayer.posZ);
+			+ Vars.mc.thePlayer.isPotionActive(Potion.hunger)
+			+ "ONFIRE" + Vars.mc.thePlayer.isBurning() + "POSX"
+			+ (int) Vars.mc.thePlayer.posX + "POSY"
+			+ (int) Vars.mc.thePlayer.posY + "POSZ"
+			+ (int) Vars.mc.thePlayer.posZ);
 	}
 	
-	public static void interpretUpdate(String update, String pName) 
+	public static void interpretUpdate(String update, Player p) 
 	{
 		String name = pName;
 		String health = update.substring(update.indexOf("HP") + 2, update.indexOf("HUNGER"));
@@ -243,13 +210,13 @@ public class TeamInfo extends Thread
 		playerposZ.put(name, Integer.valueOf(Integer.parseInt(posZ)));
 	}
 
-	public static void add(String addedPerson)
+	public static void add(Player addedPerson)
 	{
 		players.put(addedPerson, Boolean.valueOf(true));
 		GuiTeamInfoIngame.playerInfo.put(addedPerson, Boolean.valueOf(false));
 		showgui.put(addedPerson, Boolean.valueOf(true));
 
-		ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft(), Util.mc.displayWidth, Util.mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft(), Vars.mc.displayWidth, Vars.mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 
 		toplefti.put(addedPerson, Integer.valueOf(k - 110));

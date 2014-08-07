@@ -4,7 +4,7 @@ import java.io.File;
 
 import kovu.teaminfo.TeamInfo;
 import kovu.teaminfo.bot.Bot;
-import kovu.teaminfo.util.Util;
+import kovu.teaminfo.util.Vars;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Configuration;
@@ -35,11 +35,11 @@ public class ConfigurationHandler
 		
 	public static void loadConfiuration()
 	{
-		Util.username = config.getString("IRC Username", Configuration.CATEGORY_GENERAL, "nickname", "Your IRC password for esper.net");
-		Util.password = config.getString("IRC Password", Configuration.CATEGORY_GENERAL, "password", "Your IRC password for esper.net");
+		Vars.username = config.getString("IRC Username", Configuration.CATEGORY_GENERAL, "nickname", "Your IRC password for esper.net");
+		Vars.password = config.getString("IRC Password", Configuration.CATEGORY_GENERAL, "password", "Your IRC password for esper.net");
 		
-		TeamInfo.nick = Util.username;
-		TeamInfo.password = Util.password;
+		TeamInfo.nick = Vars.username;
+		TeamInfo.password = Vars.password;
 		
 		if(config.hasChanged())
 		{
@@ -51,7 +51,7 @@ public class ConfigurationHandler
 		{
 			TeamInfo.bot.disconnect();
 			
-			TeamInfo.bot = new Bot(Util.username, Util.password);
+			TeamInfo.bot = new Bot(Vars.username, Vars.password);
 			TeamInfo.bot.setVerbose(true);
 			try 
 			{

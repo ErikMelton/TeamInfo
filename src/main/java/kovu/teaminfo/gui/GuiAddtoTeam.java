@@ -1,7 +1,7 @@
 package kovu.teaminfo.gui;
 
 import kovu.teaminfo.TeamInfo;
-import kovu.teaminfo.util.Util;
+import kovu.teaminfo.util.Vars;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -24,11 +24,11 @@ public class GuiAddtoTeam extends GuiScreen
 	{
 		if (Keyboard.isKeyDown(15)) 
 		{
-			Util.showlist = true;
+			Vars.showlist = true;
 		}
 		else
 		{
-			Util.showlist = false;
+			Vars.showlist = false;
 		}
 
 		serverTextField.updateCursorCounter();

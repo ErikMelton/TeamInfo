@@ -1,6 +1,7 @@
 package kovu.teaminfo.gui;
 
 import kovu.teaminfo.TeamInfo;
+import kovu.teaminfo.player.Player;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -12,7 +13,8 @@ public class GuiAddReject extends GuiScreen
 	private GuiTextField serverTextField;
 	private String playername;
 	private String fullMessage;
-
+	private Player p;
+	
 	public GuiAddReject(GuiScreen parentscreen, String player, String fullmessage) 
 	{
 		this.parentScreen = parentscreen;
@@ -44,7 +46,10 @@ public class GuiAddReject extends GuiScreen
 		if (guibutton.id == 0) 
 		{
 			TeamInfo.acceptadd(playername);
-			TeamInfo.interpretUpdate(this.fullMessage, playername);
+			
+			p = new Player(playername);
+			
+			TeamInfo.interpretUpdate(fullMessage, p);
 			mc.displayGuiScreen(this.parentScreen);
 		}
 		if (guibutton.id == 1)
